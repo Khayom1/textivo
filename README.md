@@ -1,3 +1,19 @@
+<div align="center">
+
+<img src="assets/textivo-logo.svg" width="180">
+
+# Textivo — Typography Studio
+
+**Create. Style. Animate. Export.**
+
+A multilingual typography studio for creative text design.
+
+</div>
+
+---
+
+# LIVE DEMO
+
 Textivo — Typography Studio
 
 Create. Style. Animate. Export.
