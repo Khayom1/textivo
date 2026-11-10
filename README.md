@@ -1,247 +1,187 @@
 <div align="center">
-  <img src="assets/textivo-logo.svg"
-       width="100%"
-       alt="Textivo — Typography Studio"/>
-</div>
 
-# 🧪 Export & Import Testing — Start Here
+<img src="assets/textivo-logo.svg" alt="Textivo — Typography Studio" width="100%">
 
-**Help verify that Textivo exports and restores complete editable projects without losing formatting or animation settings.**
+# Textivo
 
-This is the first section because project portability is one of the most important features to test.
+### Your words. Your style. Your motion.
 
-## Test a complete project
+**A free, multilingual typography and motion-design studio that runs in your browser — no account, no paid API, no complicated software.**
 
-1. Open Textivo in a modern browser.
-2. Create at least three independent text lines.
-3. Format different characters and words with different fonts, sizes, colors, and weights.
-4. Test **bold**, *italic*, underline, and strikethrough.
-5. Apply text highlights, including transparent highlights.
-6. Change letter spacing, word spacing, alignment, text shadow, and canvas background.
-7. Configure Motion Studio:
-   - Animation mode
-   - Animate by line, word, or character
-   - Entrance and exit effects
-   - Movement duration
-   - Delay between parts
-   - Pause between lines
-   - Pause before exit
+[![Open Live Studio](https://img.shields.io/badge/OPEN-LIVE%20STUDIO-a78bfa?style=for-the-badge)](https://khayom1.github.io/textivo/)
+[![Languages](https://img.shields.io/badge/LANGUAGES-EN%20%7C%20RU%20%7C%20TG-20202b?style=for-the-badge)](#-languages)
+[![Offline](https://img.shields.io/badge-OFFLINE--READY-20202b?style=for-the-badge)](#-privacy--offline-first)
 
-## Export the project
-
-Open **Export & Projects** and test the available export actions:
-
-| Export option | What it is for |
-|---|---|
-| **Project JSON** | Editable project data, including text and saved settings |
-| **Animated HTML** | A portable HTML animation |
-| **Export HTML** | HTML output for the composition |
-| **Export SVG** | Scalable vector output |
-| **Export PNG** | Static image output |
-| **Copy text** | Plain-text copy |
-
-Keep the exported JSON file. It is the file used in the restoration test below.
-
-## Import and restore
-
-1. Reload Textivo, or open it in another browser.
-2. Choose **Import Project JSON**.
-3. Select the JSON file exported in the previous step.
-4. Compare the restored project with the original.
-
-## Restoration checklist
-
-- [ ] All independent text lines return in the correct order.
-- [ ] Character-level and word-level formatting is preserved.
-- [ ] Fonts, font sizes, colors, and font weights are preserved.
-- [ ] Bold, italic, underline, and strikethrough are preserved.
-- [ ] Highlights and transparent highlights are preserved.
-- [ ] Letter spacing and word spacing are preserved.
-- [ ] Alignment, text shadow, and canvas background are preserved.
-- [ ] Motion mode and animation unit are preserved.
-- [ ] Entrance and exit effects are preserved.
-- [ ] Animation duration, delays, and pauses are preserved.
-- [ ] The restored result visually matches the original.
-
-**Important:** Do not assume an item is supported just because it appears in this checklist. Verify it in the exported file and after importing it. Report any missing or changed setting.
-
-## Report a problem
-
-If something is missing or changes after export/import, open a [GitHub Issue](https://github.com/Khayom1/textivo/issues) and include:
-
-- Device and browser
-- Textivo version
-- Export format tested
-- Steps to reproduce
-- Screenshot of the original and restored result
-- The JSON file, if it is safe to share
-
----
-
-<div align="center">
-
-<img src="assets/textivo-logo.svg" width="180" alt="Textivo logo">
-
-# Textivo — Typography Studio
-
-**Create. Style. Animate. Export.**
-
-A multilingual, browser-based typography studio for creative text design.
+**[Try Textivo](https://khayom1.github.io/textivo/) · [Report a bug](https://github.com/Khayom1/textivo/issues) · [Request a feature](https://github.com/Khayom1/textivo/issues)**
 
 </div>
 
 ---
 
-## Live Demo
+## ✦ What is Textivo?
 
-**Textivo — Your text. Your rules.**
+Textivo helps anyone turn ordinary text into expressive visual content. Create typography compositions, style individual letters or words, animate text, and export your work — all in one lightweight browser-based workspace.
 
-Textivo is an independent, browser-based typography studio created by Khayom Abdurahmonov. It gives you control over individual characters, words, and independent text lines, with animation tools and multiple export formats.
+It is built for people who want polished text graphics without needing Photoshop, motion-design experience, an account, or a paid subscription.
 
-## What can you create?
+**Our principle:** useful creativity should be accessible, understandable, and private.
 
-Textivo turns plain text into customizable typography compositions. Write your text, style selected parts, animate the result, and export your work.
+## ✦ What can you create?
 
-### 1. Independent Line Editor
+- Social media titles, stories, and quote cards
+- Animated captions and typography sequences
+- Promotional text and simple announcement graphics
+- Educational visual notes and learning cards
+- Personal greetings, banners, and creative experiments
 
-- Create separate, editable text lines.
-- Add new lines with the **Add Line** button.
-- Edit each line independently.
+## ✦ Features
 
-### 2. Character & Word Styling
-
-Select a character, word, or text range and apply formatting to the selected content.
-
-Available controls include:
-
-- Font family
-- Font size
-- Text color
-- Text highlight color
-- Transparent text highlight
-- Font weight
-- Bold, italic, underline, and strikethrough
-- Letter spacing
-- Word spacing
-- Text alignment
-
-### 3. Canvas & Background Control
-
-Customize the presentation background independently from text formatting.
-
-- Canvas background color
-- Default text color
-- Transparent canvas
-- Text highlight background
-- Transparent highlight for selected text
-- Text shadow
-
-### 4. Motion Studio
-
-Create sequential text animations with three animation units:
-
-| Animation unit | Behavior |
+| Feature | What it does |
 |---|---|
-| Whole line | Animate an entire line |
-| Word by word | Reveal and animate individual words |
-| Character by character | Reveal and animate individual characters |
+| **Independent text lines** | Write and edit separate lines in one workspace |
+| **Character-level styling** | Format a selected word, letter, or text range |
+| **Typography controls** | Font, size, weight, color, highlight, spacing, and shadow |
+| **Canvas controls** | Background color, transparency, alignment, and preview |
+| **Motion Studio** | Animate by line, word, or character |
+| **Entrance & exit effects** | Fade, rise, slide, zoom, blur, pop, and more |
+| **Local project saving** | Keep editable work in your browser on this device |
+| **Project JSON** | Export and import editable project files |
+| **Portable HTML** | Export a self-contained animated HTML composition |
+| **SVG export** | Create scalable vector typography with animation support |
+| **PNG export** | Export a static image |
+| **Three languages** | English, Russian, and Tajik interface |
 
-**Entrance effects**
+## ✦ Get started
 
-- Fade in
-- Rise up
-- Slide from left
-- Zoom in
-- Blur in
-- Pop
-- None
+### Use Textivo online
 
-**Exit effects**
+Open **[Textivo Live](https://khayom1.github.io/textivo/)** in a modern browser. On supported browsers, use the browser menu to install it as an app.
 
-- Fade out
-- Drop down
-- Slide right
-- Zoom out
-- Blur out
-- None
+### Run locally
 
-**Motion controls**
-
-- Movement duration
-- Delay between animated parts
-- Pause between lines
-- Pause before exit
-- Play once
-- Loop
-- Typing only
-- Deleting only
-
-### 5. Export & Projects
-
-Textivo provides export options for different workflows:
-
-| Format | Purpose |
-|---|---|
-| Project JSON | Save project content and settings for later import |
-| Animated HTML | Portable animated HTML output |
-| HTML | Reusable HTML output |
-| SVG | Scalable vector output |
-| PNG | Static image output |
-| Copy text | Copy plain text |
-
-Project JSON is intended for reopening and continuing to edit a project in Textivo. HTML, SVG, and PNG are output formats, not substitutes for the editable project file.
-
-### 6. Multilingual Interface
-
-Textivo includes three interface languages:
-
-- English
-- Русский
-- Тоҷикӣ
-
----
-
-## Quick Start
-
-Textivo runs locally in a modern web browser. No paid API or external backend is required for the core editing workflow.
-
-### Run locally with Termux
+Requirements: Python 3 and a modern browser.
 
 ```bash
-cd ~/textivo
+git clone https://github.com/Khayom1/textivo.git
+cd textivo
 python -m http.server 8080 --bind 127.0.0.1
 ```
 
-Open this address in your browser:
+Open `http://127.0.0.1:8080`.
 
-```text
-http://127.0.0.1:8080
+### Android / Termux
+
+```bash
+pkg update
+pkg install git python
+git clone https://github.com/Khayom1/textivo.git
+cd textivo
+python -m http.server 8080 --bind 127.0.0.1
 ```
 
-Keep Termux running while using the local server. Stop the server with `CTRL + C`.
+Then open `http://127.0.0.1:8080` on the same device. Keep Termux running while using the local server.
 
-## Technology
+## ✦ Quick workflow
 
-- HTML5
-- CSS3
-- JavaScript
-- Web App Manifest
-- Service Worker
+1. **Write** — add your text as separate lines.
+2. **Select** — choose the word, letter, or range you want to change.
+3. **Style** — set font, size, color, weight, highlight, and spacing.
+4. **Preview** — review your composition as you work.
+5. **Animate** — choose line, word, or character motion and timing.
+6. **Export** — save an editable project or create a file to share.
 
-## Project Status
+## ✦ Languages
 
-Textivo is an independent project under active development. Export and import behavior should be tested using the checklist at the top of this README.
+Textivo's interface is available in:
 
-## Author
+- 🇬🇧 English
+- 🇷🇺 Русский
+- 🇹🇯 Тоҷикӣ
+
+The language selector changes the interface. Your text is not automatically translated.
+
+## ✦ Privacy & offline-first
+
+- The core editor runs in your browser.
+- No account is required.
+- No paid API is required.
+- Projects saved with **Save project** stay in local browser storage on that device.
+- Project JSON files are generated locally when exported.
+- The service worker can cache the app for offline use after its first successful load.
+
+**Important:** browser storage can be cleared by browser settings, the user, or the operating system. Export a Project JSON backup if your work matters. Private browsing may not retain saved data.
+
+## ✦ Project portability
+
+Use **Project JSON** to reopen and continue editing later. It is the editable project backup.
+
+Use HTML, SVG, or PNG when you need an output to share or use elsewhere. These formats do not replace the editable JSON project.
+
+## ✦ Roadmap
+
+Priorities are practical improvements that help real people:
+
+- [x] English, Russian, and Tajik interface
+- [x] Browser-based editing without a paid backend
+- [x] Motion Studio and multiple export formats
+- [x] Local project save and portable JSON
+- [ ] Smart templates for social posts, stories, learning cards, and announcements
+- [ ] Preset canvas sizes for common platforms
+- [ ] More reliable high-resolution PNG and animated exports
+- [ ] Expanded font support and multilingual typography
+- [ ] Automated browser tests and accessibility improvements
+- [ ] Community-contributed templates and translations
+
+Roadmap items are planned, not claims that those features are already available.
+
+## ✦ Help improve Textivo
+
+Found a bug or have an idea? Open a [GitHub Issue](https://github.com/Khayom1/textivo/issues).
+
+Please include:
+- Device and operating system
+- Browser and version
+- Expected result and actual result
+- Steps to reproduce
+- Screenshot or sample export, if useful
+
+Do not attach private text or personal information.
+
+Contributions are welcome: bug reports, translation corrections, accessibility improvements, template ideas, and code changes all help.
+
+## ✦ Technology
+
+- HTML5 and CSS3
+- Vanilla JavaScript
+- Web App Manifest and Service Worker
+- DOM, Canvas, SVG, Web Animations, and Local Storage APIs
+
+No framework or backend is required for the core editor.
+
+## ✦ Project status
+
+Textivo is an independent project under active development. Browser support and export behavior may vary. Report reproducible issues so they can be fixed transparently.
+
+**Licensing:** this repository currently has no license file. Do not assume the code is licensed for redistribution or commercial reuse until a license is added.
+
+## ✦ Author
+
+<div align="center">
 
 **Khayom Abdurahmonov**
 
-Independent creator and developer.
+Creator & Developer · Independent Project
+
+[GitHub](https://github.com/Khayom1) · [Textivo Repository](https://github.com/Khayom1/textivo)
+
+</div>
 
 ---
 
 <div align="center">
 
-**Textivo — Your text. Your rules.**
+**TEXTIVO — YOUR WORDS. YOUR STYLE. YOUR MOTION.**
+
+Built to make creative text design simpler and more accessible.
 
 </div>
