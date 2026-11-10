@@ -158,6 +158,17 @@ Contributions are welcome: bug reports, translation corrections, accessibility i
 
 No framework or backend is required for the core editor.
 
+## ✦ Run the quality checks
+
+Maintainers with Node.js 20 or newer can run the repository checks locally:
+
+```bash
+node --check js/app.js
+node scripts/check-project.mjs
+```
+
+The checks validate JavaScript syntax, static DOM references, duplicate HTML IDs, PWA metadata, cache versioning, and the author marker. Browser interaction and export behavior should also be tested manually on target devices.
+
 ## ✦ Project status
 
 Textivo is an independent project under active development. Browser support and export behavior may vary. Report reproducible issues so they can be fixed transparently.
