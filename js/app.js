@@ -497,11 +497,16 @@ function exportTextivoSVG() {
 }
 
 $("svgBtn").addEventListener("click", exportTextivoSVG); $("pngBtn").addEventListener("click",()=>{
- const canvas=document.createElement("canvas"),ctx=canvas.getContext("2d");canvas.width=1600;canvas.height=900;
+ const canvas=document.createElement("canvas"),ctx=canvas.getContext("2d");
+ const dimensions={"16:9":[1600,900],"1:1":[1080,1080],"9:16":[1080,1920],"4:5":[1080,1350]};
+ [canvas.width,canvas.height]=dimensions[$("canvasPreset").value]||dimensions["16:9"];
+ const scale=Math.min(canvas.width/1600,canvas.height/900);
  if(!hasTransparentBackground()){ctx.fillStyle=$("canvasBg").value;ctx.fillRect(0,0,canvas.width,canvas.height);}
  ctx.fillStyle=$("defaultColor").value;ctx.textAlign=$("align").value==="left"?"left":$("align").value==="right"?"right":"center";
- ctx.font=`${$("weight").value} ${Number($("size").value)||32}px "${$("font").value}"`;
- [...editor.children].forEach((row,i)=>ctx.fillText(row.innerText,ctx.textAlign==="left"?70:ctx.textAlign==="right"?1530:800,150+i*85,1450));
+ ctx.font=`${$("weight").value} ${(Number($("size").value)||32)*scale}px "${$("font").value}"`;
+ const rows=[...editor.children],lineHeight=Math.max((Number($("size").value)||32)*scale*1.65,(canvas.height-100)/Math.max(rows.length,1));
+ const firstY=(canvas.height-(rows.length-1)*lineHeight)/2;
+ rows.forEach((row,i)=>ctx.fillText(row.innerText,ctx.textAlign==="left"?70*scale:ctx.textAlign==="right"?canvas.width-70*scale:canvas.width/2,firstY+i*lineHeight,canvas.width-100*scale));
  const a=document.createElement("a");a.download="textivo.png";a.href=canvas.toDataURL("image/png");a.click();
 });
 
@@ -635,7 +640,7 @@ if(project && project.settings && project.settings.transparentHighlight!==undefi
   $("transparentHighlight").checked=!!project.settings.transparentHighlight;
 translate($("language").value);
 updatePreview();
-remember();
+undoStack=[];redoStack=[];lastRememberedHTML=editor.innerHTML;
 $("animationStatus").textContent=t("ready");
 
 /* TEXTIVO_PORTABLE_EXPORT_V10 */
@@ -662,7 +667,7 @@ $("animationStatus").textContent=t("ready");
   const ids = [
     "font","size","color","highlight","transparentHighlight","spacing","wordSpacing",
     "weight","align","shadow","linePause","deletePause","loopMode","animateBy",
-    "entranceEffect","exitEffect","unitDuration","unitDelay"
+    "entranceEffect","exitEffect","unitDuration","unitDelay","canvasPreset"
   ];
   function snapshot(){
     const settings = {};
