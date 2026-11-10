@@ -488,7 +488,7 @@ function buildTextivoAnimatedSVG() {
     const background = $("transparentBg").checked ? "" :
       `<rect x="0" y="0" width="${width}" height="${height}" fill="${svgEscape($("canvasBg").value || "#20202b")}"/>`;
     const shadowValue = $("shadow").value || "none";
-    const shadowNumbers = [...shadowValue.matchAll(/(-?\\d+(?:\\.\\d+)?)(?:px)?/g)].slice(0,3).map(match=>Number(match[1]));
+    const shadowNumbers = [...shadowValue.matchAll(/(-?\d+(?:\\.\d+)?)(?:px)?/g)].slice(0,3).map(match=>Number(match[1]));
     const shadowColor = shadowValue.match(/#[0-9a-f]{3,8}/i)?.[0] || "#000000";
     const shadowFilter = shadowValue !== "none"
       ? `<filter id="textivo-shadow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceAlpha" stdDeviation="${Math.max(0,(shadowNumbers[2]||0)/2)}" result="blur"/><feOffset in="blur" dx="${shadowNumbers[0]||0}" dy="${shadowNumbers[1]||0}" result="offset"/><feFlood flood-color="${svgEscape(shadowColor)}" flood-opacity=".75" result="color"/><feComposite in="color" in2="offset" operator="in" result="shadow"/><feMerge><feMergeNode in="shadow"/><feMergeNode in="SourceGraphic"/></feMerge></filter>` : "";
@@ -503,7 +503,7 @@ function buildTextivoAnimatedSVG() {
 ${defs}
 ${background}
 <g transform="${shift}"${shadowFilter ? ` filter="url(#textivo-shadow)"` : ""}>
-${textBlocks.map(text=>text.outerHTML).join("\\n")}
+${textBlocks.map(text=>text.outerHTML).join("\n")}
 </g>
 </svg>`;
     return svg;
@@ -550,7 +550,7 @@ $("svgBtn").addEventListener("click", exportTextivoSVG); $("pngBtn").addEventLis
    const font=[st.fontStyle&&st.fontStyle!=="normal"?st.fontStyle:"",st.fontWeight||$("weight").value,px+"px",st.fontFamily||$("font").value].filter(Boolean).join(" ");
    ctx.font=font;
    const letter=parseFloat(st.letterSpacing)||0,word=parseFloat(st.wordSpacing)||0;
-   const spaces=(run.text.match(/\\s/g)||[]).length;
+   const spaces=(run.text.match(/\s/g)||[]).length;
    const width=ctx.measureText(run.text).width+Math.max(0,run.text.length-1)*letter*scale+spaces*word*scale;
    return {...run,font,width,px,letter,word};
   });
@@ -574,7 +574,7 @@ $("svgBtn").addEventListener("click", exportTextivoSVG); $("pngBtn").addEventLis
     let cx=x;for(let i=0;i<run.text.length;i++){
      const ch=run.text[i];ctx.fillText(ch,cx,y);cx+=ctx.measureText(ch).width;
      if(i<run.text.length-1)cx+=run.letter*scale*fit;
-     if(/\\s/.test(ch))cx+=run.word*scale*fit;
+     if(/\s/.test(ch))cx+=run.word*scale*fit;
     }
    }else ctx.fillText(run.text,x,y);
    const decoration=st.textDecorationLine||st.textDecoration||"";
@@ -819,7 +819,7 @@ $("animationStatus").textContent=t("ready");
       "root.style.fontFamily=s.font||'Arial';root.style.fontSize=(s.size||32)+'px';root.style.fontWeight=s.weight||'400';root.style.textShadow=s.shadow||'none';",
       "const sleep=n=>new Promise(r=>setTimeout(r,n));let token=0;",
       "function frames(name,out){const map=out?{fade:[{opacity:1},{opacity:0}],drop:[{opacity:1,transform:'translateY(0)'},{opacity:0,transform:'translateY(28px)'}],'slide-right':[ {opacity:1,transform:'translateX(0)'},{opacity:0,transform:'translateX(35px)'}],zoom:[{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.55)'}],blur:[{opacity:1,filter:'blur(0)'},{opacity:0,filter:'blur(10px)'}]}:{fade:[{opacity:0},{opacity:1}],rise:[{opacity:0,transform:'translateY(28px)'},{opacity:1,transform:'translateY(0)'}],'slide-left':[{opacity:0,transform:'translateX(-35px)'},{opacity:1,transform:'translateX(0)'}],zoom:[{opacity:0,transform:'scale(.55)'},{opacity:1,transform:'scale(1)}],blur:[{opacity:0,filter:'blur(10px)'},{opacity:1,filter:'blur(0)'}],pop:[{opacity:0,transform:'scale(.65)'},{opacity:1,transform:'scale(1.12)',offset:.72},{opacity:1,transform:'scale(1)'}]};return map[name]||[{opacity:1},{opacity:1}]}",
-      "function split(line,kind){if(kind==='line'){const x=document.createElement('div');x.className='unit line';x.innerHTML=line.innerHTML;return [x]}const out=[];function walk(node,styles){if(node.nodeType===3){for(const ch of node.nodeValue){const x=document.createElement('span');x.className='unit';x.textContent=ch;Object.assign(x.style,styles);out.push(x)}return}if(node.nodeType!==1)return;const cs=getComputedStyle(node),next={...styles};['fontFamily','fontSize','fontWeight','fontStyle','textDecoration','color','backgroundColor','letterSpacing','wordSpacing','textShadow'].forEach(k=>{const v=cs[k];if(v&&v!=='normal'&&v!=='rgba(0, 0, 0, 0)')next[k]=v});node.childNodes.forEach(n=>walk(n,next))}line.childNodes.forEach(n=>walk(n,{}));if(kind==='character')return out;const words=[];let cur=null;out.forEach(ch=>{if(/^\\s+$/.test(ch.textContent)){if(cur)cur.appendChild(ch);else{const w=document.createElement('span');w.className='unit';w.appendChild(ch);words.push(w)}}else{if(!cur){cur=document.createElement('span');cur.className='unit';words.push(cur)}cur.appendChild(ch)}});return words.filter(x=>x.textContent.length)}",
+      "function split(line,kind){if(kind==='line'){const x=document.createElement('div');x.className='unit line';x.innerHTML=line.innerHTML;return [x]}const out=[];function walk(node,styles){if(node.nodeType===3){for(const ch of node.nodeValue){const x=document.createElement('span');x.className='unit';x.textContent=ch;Object.assign(x.style,styles);out.push(x)}return}if(node.nodeType!==1)return;const cs=getComputedStyle(node),next={...styles};['fontFamily','fontSize','fontWeight','fontStyle','textDecoration','color','backgroundColor','letterSpacing','wordSpacing','textShadow'].forEach(k=>{const v=cs[k];if(v&&v!=='normal'&&v!=='rgba(0, 0, 0, 0)')next[k]=v});node.childNodes.forEach(n=>walk(n,next))}line.childNodes.forEach(n=>walk(n,{}));if(kind==='character')return out;const words=[];let cur=null;out.forEach(ch=>{if(/^\s+$/.test(ch.textContent)){if(cur)cur.appendChild(ch);else{const w=document.createElement('span');w.className='unit';w.appendChild(ch);words.push(w)}}else{if(!cur){cur=document.createElement('span');cur.className='unit';words.push(cur)}cur.appendChild(ch)}});return words.filter(x=>x.textContent.length)}",
       "async function animate(el,fs,ms,t){if(t!==token)return;if(el.animate){try{await el.animate(fs,{duration:ms,easing:'cubic-bezier(.2,.75,.25,1)',fill:'both'}).finished}catch(e){}}else await sleep(ms)}",
       "async function run(){const t=++token,rows=[...root.querySelectorAll('.text-line,div')].filter(x=>x.parentElement===root&&x.textContent.trim());const mode=s.loopMode||'once',kind=s.animateBy||'character',enter=s.entranceEffect||'fade',leave=s.exitEffect||'fade',duration=+(s.unitDuration||500),delay=+(s.unitDelay||120),linePause=+(s.linePause||500),deletePause=+(s.deletePause||1500);",
       "do{for(let li=0;li<rows.length;li++){if(t!==token)return;status.textContent='Line '+(li+1)+' / '+rows.length;const units=split(rows[li],kind);root.replaceChildren();const shown=[];if(mode!=='delete'){for(let i=0;i<units.length;i++){if(t!==token)return;const u=units[i];if(kind==='line'){u.style.display='block';u.style.width='100%';u.style.whiteSpace='pre-wrap'}else{u.style.display='inline-block';u.style.whiteSpace='pre-wrap'}root.appendChild(u);shown.push(u);if(enter!=='none')await animate(u,frames(enter,false),duration,t);if(i<units.length-1)await sleep(delay)}}else units.forEach(u=>{u.style.display=kind==='line'?'block':'inline-block';root.appendChild(u);shown.push(u)});",
