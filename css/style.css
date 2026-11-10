@@ -34,3 +34,8 @@
 /* v13: quick templates and canvas presets */
 .template-tools{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:end;margin:12px 0}.template-tools label{margin-top:0}.template-tools button{min-height:42px;white-space:nowrap}.template-tools select{min-width:0}@media(max-width:420px){.template-tools{grid-template-columns:1fr}.template-tools button{width:100%}}
 #preview{aspect-ratio:16/9;max-height:520px;transition:aspect-ratio .2s ease}
+
+/* v14 accessibility and interaction polish */
+button:focus-visible,select:focus-visible,input:focus-visible,.text-line:focus-visible{outline:2px solid #c4a7ff;outline-offset:3px}
+button:disabled{opacity:.55;cursor:not-allowed;transform:none}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation-duration:.01ms!important;animation-iteration-count:1!important}}
