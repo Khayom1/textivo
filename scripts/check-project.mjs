@@ -33,20 +33,20 @@ assert.match(js, /textBlocks\.map\(text=>text\.outerHTML\)/, "SVG export must se
 assert.match(js, /wordSpacing/, "Word spacing must be included in export logic");
 assert.match(css, /prefers-reduced-motion/, "Reduced-motion preferences must be respected");
 
-const appVersion = js.match(/TEXTIVO_BUILD = ["']v(\\d+)["']/)?.[1];
-const cacheVersion = sw.match(/textivo-v(\\d+)/)?.[1];
-const scriptVersion = html.match(/js\\/app\\.js\\?v=(\\d+)/)?.[1];
-const styleVersion = html.match(/css\\/style\\.css\\?v=(\\d+)/)?.[1];
+const appVersion = js.match(/TEXTIVO_BUILD = ["']v(\d+)["']/)?.[1];
+const cacheVersion = sw.match(/textivo-v(\d+)/)?.[1];
+const scriptVersion = html.match(/js\/app\.js\?v=(\d+)/)?.[1];
+const styleVersion = html.match(/css\/style\.css\?v=(\d+)/)?.[1];
 assert.ok(appVersion, "App build version must be declared");
 assert.equal(cacheVersion, appVersion, "Service worker cache version must match app build");
 assert.equal(scriptVersion, appVersion, "HTML app script version must match app build");
 assert.equal(styleVersion, appVersion, "HTML stylesheet version must match app build");
 assert.ok(existsSync("assets/textivo-icon.svg"), "PWA icon file must exist");
 
-const precache = sw.match(/const FILES=\\[(.*?)\\];/s)?.[1] || "";
+const precache = sw.match(/const FILES=\[(.*?)\];/s)?.[1] || "";
 assert.ok(precache.includes(`style.css?v=${appVersion}`), "Offline cache must include the current stylesheet");
 assert.ok(precache.includes(`app.js?v=${appVersion}`), "Offline cache must include the current app script");
-for (const match of precache.matchAll(/["']\\.\\/([^"'?]+)(?:\\?[^"']*)?["']/g)) {
+for (const match of precache.matchAll(/["']\.\/([^"'?]+)(?:\?[^"']*)?["']/g)) {
   assert.ok(existsSync(match[1]), `Offline cache references a missing file: ${match[1]}`);
 }
 
