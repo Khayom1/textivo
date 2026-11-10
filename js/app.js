@@ -1,3 +1,4 @@
+/*! Textivo Typography Studio | Author: Khayom Abdurahmonov | https://github.com/Khayom1/textivo */
 (() => {
 "use strict";
 const $ = id => document.getElementById(id);
@@ -138,11 +139,27 @@ function normalizeLines(){
    row.setAttribute("spellcheck","false");
  });
 }
+function sanitizeEditorHTML(input){
+ const parser=new DOMParser(),doc=parser.parseFromString(String(input||""),"text/html");
+ const tags=new Set(["DIV","SPAN","B","STRONG","I","EM","U","S","BR"]);
+ const styles=new Set(["color","background-color","font-family","font-size","font-weight","font-style","text-decoration","letter-spacing","word-spacing","text-shadow"]);
+ const safe=v=>!/(url\\s*\\(|expression\\s*\\(|javascript:|@import|[<>])/i.test(v);
+ function clean(node){
+  if(node.nodeType===Node.TEXT_NODE)return document.createTextNode(node.nodeValue||"");
+  if(node.nodeType!==Node.ELEMENT_NODE)return document.createDocumentFragment();
+  if(!tags.has(node.tagName)){const f=document.createDocumentFragment();[...node.childNodes].forEach(n=>f.appendChild(clean(n)));return f}
+  const out=document.createElement(node.tagName.toLowerCase());if(node.tagName==="DIV")out.className="text-line";
+  if(node.hasAttribute("style")){const probe=document.createElement("span");probe.setAttribute("style",node.getAttribute("style"));for(const p of styles){const v=probe.style.getPropertyValue(p).trim();if(v&&safe(v))out.style.setProperty(p,v)}}
+  [...node.childNodes].forEach(n=>out.appendChild(clean(n)));return out;
+ }
+ const root=document.createElement("div");[...doc.body.childNodes].forEach(n=>root.appendChild(clean(n)));return root.innerHTML;
+}
 normalizeLines();
-
+let lastRememberedHTML=editor.innerHTML;
 function remember(){
- const html=editor.innerHTML;
- if(undoStack[undoStack.length-1]!==html){undoStack.push(html);if(undoStack.length>80)undoStack.shift();redoStack=[]}
+ const html=editor.innerHTML;if(html===lastRememberedHTML)return;
+ undoStack.push(lastRememberedHTML);if(undoStack.length>80)undoStack.shift();
+ lastRememberedHTML=html;redoStack=[];
 }
 function hasTransparentBackground(){return $("transparentBg").checked}
 function updatePreview(){
@@ -237,23 +254,21 @@ editor.addEventListener("keydown",event=>{
 });
 
 $("undoBtn").addEventListener("click",()=>{
- if(!undoStack.length)return;redoStack.push(editor.innerHTML);editor.innerHTML=undoStack.pop();normalizeLines();updatePreview();
+ if(!undoStack.length)return;redoStack.push(editor.innerHTML);editor.innerHTML=undoStack.pop();normalizeLines();lastRememberedHTML=editor.innerHTML;updatePreview();
 });
 $("redoBtn").addEventListener("click",()=>{
- if(!redoStack.length)return;undoStack.push(editor.innerHTML);editor.innerHTML=redoStack.pop();normalizeLines();updatePreview();
+ if(!redoStack.length)return;undoStack.push(editor.innerHTML);editor.innerHTML=redoStack.pop();normalizeLines();lastRememberedHTML=editor.innerHTML;updatePreview();
 });
 $("resetBtn").addEventListener("click",()=>{
- if(confirm("Reset text?")){editor.innerHTML="<div>Create something amazing.</div>";undoStack=[];redoStack=[];remember();updatePreview()}
+ if(confirm("Reset text?")){editor.innerHTML='<div class="text-line" contenteditable="true" spellcheck="false">Create something amazing.</div>';normalizeLines();undoStack=[];redoStack=[];lastRememberedHTML=editor.innerHTML;updatePreview()}
 });
 
 $("saveBtn").addEventListener("click",()=>{
- localStorage.setItem("textivo-project-v9",JSON.stringify({
-  html:editor.innerHTML,lang:$("language").value,bg:$("canvasBg").value,transparentBg:hasTransparentBackground(),
-  align:$("align").value,settings:{font:$("font").value,size:$("size").value,color:$("color").value,
-  highlight:$("highlight").value,transparentHighlight:$("transparentHighlight").checked,spacing:$("spacing").value,wordSpacing:$("wordSpacing").value,
-  weight:$("weight").value,shadow:$("shadow").value,animateBy:$("animateBy").value,entranceEffect:$("entranceEffect").value,exitEffect:$("exitEffect").value,unitDuration:$("unitDuration").value,unitDelay:$("unitDelay").value}
- }));
- alert("Project saved on this device.");
+ const ids=["font","size","color","highlight","transparentHighlight","spacing","wordSpacing","weight","align","shadow","linePause","deletePause","loopMode","animateBy","entranceEffect","exitEffect","unitDuration","unitDelay"],settings={};
+ ids.forEach(id=>{const el=$(id);if(el)settings[id]=el.type==="checkbox"?el.checked:el.value});
+ const project={format:"textivo-project",schemaVersion:2,app:"Textivo",author:"Khayom Abdurahmonov",savedAt:new Date().toISOString(),html:sanitizeEditorHTML(editor.innerHTML),lang:$("language").value,bg:$("canvasBg").value,transparentBg:hasTransparentBackground(),defaultColor:$("defaultColor").value,align:$("align").value,settings};
+ try{const data=JSON.stringify(project);if(data.length>2000000)throw new Error("Project exceeds the 2 MB local-storage limit.");localStorage.setItem("textivo-project-v13",data);localStorage.setItem("textivo-project-v9",data);$("saveBtn").textContent="Saved ✓";setTimeout(()=>$("saveBtn").textContent=t("saveBtn"),1600)}
+ catch(error){alert("Could not save project: "+error.message)}
 });
 function download(name,data,type){
  const url=URL.createObjectURL(new Blob([data],{type})),a=document.createElement("a");
@@ -264,7 +279,7 @@ $("copyBtn").addEventListener("click",async()=>{
  catch{alert("Clipboard access is not available. Select and copy the text manually.")}
 });
 $("htmlBtn").addEventListener("click",()=>download("textivo.html",
- `<!doctype html><meta charset="utf-8"><div>${editor.innerHTML}</div>`,"text/html"));
+ `<!doctype html><html lang="${$("language").value}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Textivo Export</title><style>body{margin:0;padding:32px;background:${hasTransparentBackground()?"transparent":$("canvasBg").value};color:${$("defaultColor").value};font-family:Arial,sans-serif}.text-line{white-space:pre-wrap;overflow-wrap:anywhere;text-align:${$("align").value}}</style></head><body><main>${sanitizeEditorHTML(editor.innerHTML)}</main><footer>Created with Textivo · Khayom Abdurahmonov</footer></body></html>`,"text/html"));
 
 /* TEXTIVO_SVG_EXPORT_V12 — native vector + SMIL animation */
 function svgEscape(value) {
@@ -587,15 +602,12 @@ $("transparentBg").addEventListener("change",()=>{updatePreview();animationScree
 
 let project=null;
 try{
- project=JSON.parse(localStorage.getItem("textivo-project-v9")||localStorage.getItem("textivo-project-v8")||localStorage.getItem("textivo-project-v7")||localStorage.getItem("textivo-project-v5")||"null");
+ project=JSON.parse(localStorage.getItem("textivo-project-v13")||localStorage.getItem("textivo-project-v9")||localStorage.getItem("textivo-project-v8")||localStorage.getItem("textivo-project-v7")||localStorage.getItem("textivo-project-v5")||"null");
  if(project){
-  editor.innerHTML=project.html||editor.innerHTML;
-  $("language").value=project.lang||"en";
-  $("canvasBg").value=project.bg||"#20202b";
-  $("transparentBg").checked=!!project.transparentBg;
-  $("align").value=project.align||"center";
-  const s=project.settings||{};
-  ["font","size","color","highlight","spacing","wordSpacing","weight","shadow","animateBy","entranceEffect","exitEffect","unitDuration","unitDelay"].forEach(id=>{if(s[id]!==undefined)$(id).value=s[id]});
+  editor.innerHTML=sanitizeEditorHTML(project.html||editor.innerHTML);
+  $("language").value=["en","ru","tg"].includes(project.lang)?project.lang:"en";
+  $("canvasBg").value=project.bg||"#20202b";$("transparentBg").checked=!!project.transparentBg;$("defaultColor").value=project.defaultColor||"#ffffff";
+  const s=project.settings||{};["font","size","color","highlight","transparentHighlight","spacing","wordSpacing","weight","align","shadow","linePause","deletePause","loopMode","animateBy","entranceEffect","exitEffect","unitDuration","unitDelay"].forEach(id=>{if(s[id]!==undefined&&$(id)){if($(id).type==="checkbox")$(id).checked=!!s[id];else $(id).value=s[id]}});
  }
 }catch(error){console.warn("Could not restore project",error)}
 normalizeLines();
@@ -645,7 +657,7 @@ $("animationStatus").textContent=t("ready");
       exportedAt: new Date().toISOString(),
       language: $("language")?.value || "en",
       content: {
-        html: editor.innerHTML,
+        html: sanitizeEditorHTML(editor.innerHTML),
         background: $("canvasBg")?.value || "#20202b",
         transparentBackground: !!$("transparentBg")?.checked,
         defaultColor: $("defaultColor")?.value || "#ffffff"
@@ -673,24 +685,19 @@ $("animationStatus").textContent=t("ready");
     const file = fileInput.files && fileInput.files[0];
     if (!file) return;
     try {
-      const data = JSON.parse(await file.text());
-      if (data.format !== "textivo-project" || !data.content || typeof data.content.html !== "string")
-        throw new Error("This is not a valid Textivo project file.");
-      if (!confirm("Replace the current Textivo workspace with this project?")) return;
-      editor.innerHTML = data.content.html;
-      if ($("language")) $("language").value = data.language || "en";
-      if ($("canvasBg")) $("canvasBg").value = data.content.background || "#20202b";
-      if ($("transparentBg")) $("transparentBg").checked = !!data.content.transparentBackground;
-      if ($("defaultColor")) $("defaultColor").value = data.content.defaultColor || "#ffffff";
-      Object.entries(data.settings || {}).forEach(([id,value]) => {
-        const el = $(id); if (!el) return;
-        if (el.type === "checkbox") el.checked = !!value;
-        else el.value = value;
-      });
-      normalizeLines(); translate($("language").value); updatePreview();
-      remember();
-      $("animationStatus").textContent = "Project imported";
-      alert("Textivo project imported. All stored text and settings have been restored.");
+      if(file.size>2000000)throw new Error("Project file exceeds the 2 MB safety limit.");
+      const data=JSON.parse(await file.text());
+      if(data.format!=="textivo-project"||!data.content||typeof data.content.html!=="string"||!data.settings||typeof data.settings!=="object")throw new Error("This is not a valid Textivo project file.");
+      if(!confirm("Replace the current Textivo workspace with this project?"))return;
+      editor.innerHTML=sanitizeEditorHTML(data.content.html);
+      $("language").value=["en","ru","tg"].includes(data.language)?data.language:"en";
+      $("canvasBg").value=/^#[0-9a-f]{6}$/i.test(data.content.background||"")?data.content.background:"#20202b";
+      $("transparentBg").checked=!!data.content.transparentBackground;
+      $("defaultColor").value=/^#[0-9a-f]{6}$/i.test(data.content.defaultColor||"")?data.content.defaultColor:"#ffffff";
+      const allowed=new Set(["font","size","color","highlight","transparentHighlight","spacing","wordSpacing","weight","align","shadow","linePause","deletePause","loopMode","animateBy","entranceEffect","exitEffect","unitDuration","unitDelay"]);
+      Object.entries(data.settings).forEach(([id,value])=>{if(!allowed.has(id))return;const el=$(id);if(!el)return;if(el.type==="checkbox")el.checked=!!value;else if(el.tagName==="SELECT"&&[...el.options].some(o=>o.value===String(value)))el.value=String(value);else if(el.type==="number"||el.type==="range"){const n=Number(value);if(Number.isFinite(n))el.value=String(Math.max(Number(el.min)||-Infinity,Math.min(Number(el.max)||Infinity,n)))}else if(el.type==="color"&&/^#[0-9a-f]{6}$/i.test(String(value)))el.value=value});
+      normalizeLines();translate($("language").value);updatePreview();undoStack=[];redoStack=[];lastRememberedHTML=editor.innerHTML;
+      $("animationStatus").textContent="Project imported";alert("Textivo project imported safely.");
     } catch (err) {
       alert("Could not import project: " + err.message);
     } finally { fileInput.value = ""; }
