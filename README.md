@@ -125,8 +125,8 @@ Priorities are practical improvements that help real people:
 - [x] Browser-based editing without a paid backend
 - [x] Motion Studio and multiple export formats
 - [x] Local project save and portable JSON
-- [ ] Smart templates for social posts, stories, learning cards, and announcements
-- [ ] Preset canvas sizes for common platforms
+- [x] Smart templates for quote cards, announcements, study notes, creator titles, and minimal statements
+- [x] Preset canvas formats: 16:9, 1:1, 9:16, and 4:5
 - [ ] More reliable high-resolution PNG and animated exports
 - [ ] Expanded font support and multilingual typography
 - [ ] Automated browser tests and accessibility improvements
