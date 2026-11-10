@@ -5,7 +5,7 @@ const $ = id => document.getElementById(id);
 const editor = $("editor");
 const animationScreen = $("animationScreen");
 let savedRange = null, undoStack = [], redoStack = [], animationToken = 0;
-window.TEXTIVO_BUILD = "v13";
+window.TEXTIVO_BUILD = "v14";
 
 const dict = {
 en: {
@@ -147,7 +147,7 @@ function normalizeLines(){
 function sanitizeEditorHTML(input){
  const parser=new DOMParser(),doc=parser.parseFromString(String(input||""),"text/html");
  const tags=new Set(["DIV","SPAN","B","STRONG","I","EM","U","S","BR"]);
- const styles=new Set(["color","background-color","font-family","font-size","font-weight","font-style","text-decoration","letter-spacing","word-spacing","text-shadow"]);
+ const styles=new Set(["color","background-color","font-family","font-size","font-weight","font-style","text-decoration","text-align","letter-spacing","word-spacing","text-shadow"]);
  const safe=v=>!/(url\s*\(|expression\s*\(|javascript:|@import|[<>])/i.test(v);
  function clean(node){
   if(node.nodeType===Node.TEXT_NODE)return document.createTextNode(node.nodeValue||"");
@@ -189,6 +189,9 @@ function updatePreview(){
  $("previewText").style.textAlign=$("align").value;
  $("previewText").style.textShadow=$("shadow").value;
  $("previewText").style.color=$("defaultColor").value;
+ $("previewText").style.fontFamily=$("font").value||"Arial";
+ $("previewText").style.fontSize=(Math.max(6,Math.min(200,Number($("size").value)||32)))+"px";
+ $("previewText").style.fontWeight=$("weight").value||"400";
 }
 function captureSelection(){
  const selection=window.getSelection();
@@ -197,6 +200,10 @@ function captureSelection(){
 }
 document.addEventListener("selectionchange",captureSelection);
 editor.addEventListener("input",()=>{remember();updatePreview()});
+["canvasPreset","canvasBg","defaultColor","align","shadow","font","size","weight"].forEach(id=>{
+ const control=$(id);if(!control)return;
+ control.addEventListener(control.tagName==="SELECT"?"change":"input",updatePreview);
+});
 editor.addEventListener("paste",event=>{
  event.preventDefault();
  const text=(event.clipboardData||window.clipboardData)?.getData("text/plain")||"";
@@ -215,7 +222,7 @@ editor.addEventListener("paste",event=>{
 function restoreSelection(){
  if(!savedRange)return false;
  const selection=window.getSelection();
- try{selection.removeAllRanges();selection.addRange(savedRange);return editor.contains(selection.anchorNode)}
+ try{if(!editor.contains(savedRange.commonAncestorContainer))return false;selection.removeAllRanges();selection.addRange(savedRange);return editor.contains(selection.anchorNode)}
  catch{return false}
 }
 function applyStyle(styles){
@@ -419,7 +426,6 @@ function buildTextivoAnimatedSVG() {
     "word-spacing": `${svgNum($("wordSpacing").value)}px`
   };
   const textBlocks = [];
-  const anims = [];
   let timeline = 0;
   let longestLineWidth = 0;
   const measureSvg = document.createElementNS("http://www.w3.org/2000/svg","svg");
@@ -466,7 +472,7 @@ function buildTextivoAnimatedSVG() {
         }
         if (animationMarkup) target.insertAdjacentHTML("beforeend", animationMarkup);
       });
-      textBlocks.push(text.outerHTML);
+      textBlocks.push(text);
       const enterSpan = Math.max(0,unitCount-1)*delay + duration;
       timeline += (mode === "type" ? enterSpan : enterSpan + deletePause + Math.max(0,unitCount-1)*delay + duration) + linePause;
     });
@@ -474,26 +480,31 @@ function buildTextivoAnimatedSVG() {
     const width = Math.max(240, Math.ceil(longestLineWidth + fontSize*3), 600);
     const height = Math.max(160, Math.ceil(bbox + fontSize*2));
     const xOffset = width/2;
+    const alignment=$("align").value;
+    textBlocks.forEach(text=>{
+      text.setAttribute("x",alignment==="left"?String(-width/2+40):alignment==="right"?String(width/2-40):"0");
+      text.setAttribute("text-anchor",alignment==="left"?"start":alignment==="right"?"end":"middle");
+    });
     const background = $("transparentBg").checked ? "" :
       `<rect x="0" y="0" width="${width}" height="${height}" fill="${svgEscape($("canvasBg").value || "#20202b")}"/>`;
     const shadowValue = $("shadow").value || "none";
+    const shadowNumbers = [...shadowValue.matchAll(/(-?\\d+(?:\\.\\d+)?)(?:px)?/g)].slice(0,3).map(match=>Number(match[1]));
+    const shadowColor = shadowValue.match(/#[0-9a-f]{3,8}/i)?.[0] || "#000000";
     const shadowFilter = shadowValue !== "none"
-      ? `<filter id="textivo-shadow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur"/><feOffset in="blur" dx="0" dy="3" result="offset"/><feFlood flood-color="${svgEscape(shadowValue.includes("#") ? shadowValue.slice(shadowValue.lastIndexOf("#")) : "#000000")}" flood-opacity=".65" result="color"/><feComposite in="color" in2="offset" operator="in" result="shadow"/><feMerge><feMergeNode in="shadow"/><feMergeNode in="SourceGraphic"/></feMerge></filter>` : "";
+      ? `<filter id="textivo-shadow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceAlpha" stdDeviation="${Math.max(0,(shadowNumbers[2]||0)/2)}" result="blur"/><feOffset in="blur" dx="${shadowNumbers[0]||0}" dy="${shadowNumbers[1]||0}" result="offset"/><feFlood flood-color="${svgEscape(shadowColor)}" flood-opacity=".75" result="color"/><feComposite in="color" in2="offset" operator="in" result="shadow"/><feMerge><feMergeNode in="shadow"/><feMergeNode in="SourceGraphic"/></feMerge></filter>` : "";
     const defs = `<defs>${shadowFilter}<style><![CDATA[
       text{dominant-baseline:auto}
       .svg-unit{white-space:pre}
     ]]></style></defs>`;
     const shift = `translate(${xOffset} ${fontSize})`;
     const repeat = mode === "loop" ? "indefinite" : "1";
-    const animations = anims.filter(Boolean).join("");
     const svg = `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" version="1.1">
 ${defs}
 ${background}
 <g transform="${shift}"${shadowFilter ? ` filter="url(#textivo-shadow)"` : ""}>
-${textBlocks.join("\n")}
+${textBlocks.map(text=>text.outerHTML).join("\\n")}
 </g>
-<g aria-hidden="true">${animations.replace(/repeatCount="1"/g,`repeatCount="${repeat}"`)}</g>
 </svg>`;
     return svg;
   } finally {
@@ -514,7 +525,7 @@ $("svgBtn").addEventListener("click", exportTextivoSVG); $("pngBtn").addEventLis
  const canvas=document.createElement("canvas"),ctx=canvas.getContext("2d");
  const dimensions={"16:9":[1600,900],"1:1":[1080,1080],"9:16":[1080,1920],"4:5":[1080,1350]};
  [canvas.width,canvas.height]=dimensions[$("canvasPreset").value]||dimensions["16:9"];
- const scale=Math.min(canvas.width/1600,canvas.height/900),rows=[...editor.children];
+ const scale=Math.min(canvas.width/1600,canvas.height/900),rows=[...editor.children].filter(row=>(row.textContent||"").trim());
  if(!hasTransparentBackground()){ctx.fillStyle=$("canvasBg").value;ctx.fillRect(0,0,canvas.width,canvas.height)}
  const baseSize=(Number($("size").value)||32)*scale;
  const lineHeight=Math.max(baseSize*1.7,(canvas.height-100*scale)/Math.max(rows.length,1));
@@ -524,7 +535,7 @@ $("svgBtn").addEventListener("click", exportTextivoSVG); $("pngBtn").addEventLis
   if(node.nodeType===Node.TEXT_NODE){
    if(node.nodeValue){
     const cs=getComputedStyle(node.parentElement);
-    inherited.push({text:node.nodeValue,style:{fontSize:cs.fontSize,fontFamily:cs.fontFamily,fontWeight:cs.fontWeight,fontStyle:cs.fontStyle,color:cs.color,backgroundColor:cs.backgroundColor,letterSpacing:cs.letterSpacing,textDecorationLine:cs.textDecorationLine,textShadow:cs.textShadow}});
+    inherited.push({text:node.nodeValue,style:{fontSize:cs.fontSize,fontFamily:cs.fontFamily,fontWeight:cs.fontWeight,fontStyle:cs.fontStyle,color:cs.color,backgroundColor:cs.backgroundColor,letterSpacing:cs.letterSpacing,wordSpacing:cs.wordSpacing,textDecorationLine:cs.textDecorationLine,textShadow:cs.textShadow}});
    }
    return;
   }
@@ -538,9 +549,10 @@ $("svgBtn").addEventListener("click", exportTextivoSVG); $("pngBtn").addEventLis
    const st=run.style,px=Math.max(6,parseFloat(st.fontSize)||baseSize/scale)*scale;
    const font=[st.fontStyle&&st.fontStyle!=="normal"?st.fontStyle:"",st.fontWeight||$("weight").value,px+"px",st.fontFamily||$("font").value].filter(Boolean).join(" ");
    ctx.font=font;
-   const letter=parseFloat(st.letterSpacing)||0;
-   const width=ctx.measureText(run.text).width+Math.max(0,run.text.length-1)*letter*scale;
-   return {...run,font,width,px,letter};
+   const letter=parseFloat(st.letterSpacing)||0,word=parseFloat(st.wordSpacing)||0;
+   const spaces=(run.text.match(/\\s/g)||[]).length;
+   const width=ctx.measureText(run.text).width+Math.max(0,run.text.length-1)*letter*scale+spaces*word*scale;
+   return {...run,font,width,px,letter,word};
   });
   const total=prepared.reduce((sum,run)=>sum+run.width,0),maxWidth=canvas.width-100*scale;
   const fit=Math.min(1,maxWidth/Math.max(total,1)),rowWidth=total*fit;
@@ -558,8 +570,12 @@ $("svgBtn").addEventListener("click", exportTextivoSVG); $("pngBtn").addEventLis
    const shadowColor=shadow.match(/rgba?\([^)]+\)|#[0-9a-f]{3,8}|\b[a-z]+\b/i)?.[0]||"transparent";
    const shadowNumbers=[...shadow.matchAll(/(-?\d+(?:\.\d+)?)px/g)].map(match=>Number(match[1]));
    ctx.shadowColor=shadowColor;ctx.shadowOffsetX=(shadowNumbers[0]||0)*scale*fit;ctx.shadowOffsetY=(shadowNumbers[1]||0)*scale*fit;ctx.shadowBlur=(shadowNumbers[2]||0)*scale*fit;
-   if(run.letter){
-    let cx=x;for(const ch of run.text){ctx.fillText(ch,cx,y);cx+=ctx.measureText(ch).width+run.letter*scale*fit}
+   if(run.letter||run.word){
+    let cx=x;for(let i=0;i<run.text.length;i++){
+     const ch=run.text[i];ctx.fillText(ch,cx,y);cx+=ctx.measureText(ch).width;
+     if(i<run.text.length-1)cx+=run.letter*scale*fit;
+     if(/\\s/.test(ch))cx+=run.word*scale*fit;
+    }
    }else ctx.fillText(run.text,x,y);
    const decoration=st.textDecorationLine||st.textDecoration||"";
    if(/underline|line-through/.test(decoration)){
