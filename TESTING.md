@@ -24,6 +24,7 @@ cd textivo
 
 ```bash
 node --check js/app.js
+node --check sw.js
 node --check scripts/check-project.mjs
 node scripts/check-project.mjs
 python -m json.tool manifest.json
