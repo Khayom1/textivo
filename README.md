@@ -39,6 +39,8 @@ It is built for people who want polished text graphics without needing Photoshop
 | Feature | What it does |
 |---|---|
 | **Independent text lines** | Write and edit separate lines in one workspace |
+| **Quick-start templates** | Start with quote, announcement, study, creator, or minimal layouts |
+| **Canvas presets** | Compose in landscape, square, story, or portrait formats |
 | **Character-level styling** | Format a selected word, letter, or text range |
 | **Typography controls** | Font, size, weight, color, highlight, spacing, and shadow |
 | **Canvas controls** | Background color, transparency, alignment, and preview |
