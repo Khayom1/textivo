@@ -405,8 +405,7 @@ function svgAnimationMarkup(targetId, effect, begin, duration, exit=false, repea
   };
   const pair = transforms[effect];
   const transform = pair ? `<animateTransform attributeName="transform" type="${effect==="zoom"||effect==="pop"?"scale":"translate"}" ${effect==="zoom"||effect==="pop"?`from="${pair[0].replace("scale(","").replace(")","")}" to="${pair[1].replace("scale(","").replace(")","")}"`:`from="${pair[0].replace("translate(","").replace(")","")}" to="${pair[1].replace("translate(","").replace(")","")}"`} ${timing}/>` : "";
-  const blur = effect === "blur" ? `<animate attributeName="opacity" ${fade} ${timing}/>` : "";
-  return opacity + transform + blur;
+  return opacity + transform;
 }
 function buildTextivoAnimatedSVG() {
   const rows = Array.from(editor.children).filter(row => (row.textContent || "").length);
@@ -430,6 +429,7 @@ function buildTextivoAnimatedSVG() {
     "word-spacing": `${svgNum($("wordSpacing").value)}px`
   };
   const textBlocks = [];
+  const blurFilters = [];
   let timeline = 0;
   let longestLineWidth = 0;
   const measureSvg = document.createElementNS("http://www.w3.org/2000/svg","svg");
@@ -466,13 +466,24 @@ function buildTextivoAnimatedSVG() {
         const id = `txv-${lineIndex}-${unitIndex}`;
         target.setAttribute("id",id);
         const unitStart = enterStart + (unitMode === "line" ? 0 : unitIndex*delay);
+        const outStart = exitStart + (unitMode === "line" ? 0 : unitIndex*delay);
         let animationMarkup = "";
         if (mode !== "delete" && entrance !== "none") {
           animationMarkup += svgAnimationMarkup(id, entrance, unitStart, duration, false, mode === "loop" ? "indefinite" : "1");
         }
         if (mode !== "type" && exit !== "none") {
-          const outStart = exitStart + (unitMode === "line" ? 0 : unitIndex*delay);
           animationMarkup += svgAnimationMarkup(id, exit, outStart, duration, true, mode === "loop" ? "indefinite" : "1");
+        }
+        const blurIn = mode !== "delete" && entrance === "blur";
+        const blurOut = mode !== "type" && exit === "blur";
+        if (blurIn || blurOut) {
+          const blurId = `txv-blur-${lineIndex}-${unitIndex}`;
+          const blurDuration = Math.max(0.001, duration / 1000).toFixed(3);
+          const blurAnimations = [];
+          if (blurIn) blurAnimations.push(`<animate attributeName="stdDeviation" from="6" to="0" begin="${(unitStart/1000).toFixed(3)}s" dur="${blurDuration}s" fill="freeze"/>`);
+          if (blurOut) blurAnimations.push(`<animate attributeName="stdDeviation" from="0" to="6" begin="${(outStart/1000).toFixed(3)}s" dur="${blurDuration}s" fill="freeze"/>`);
+          blurFilters.push(`<filter id="${blurId}" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur in="SourceGraphic" stdDeviation="${blurIn ? 6 : 0}">${blurAnimations.join("")}</feGaussianBlur></filter>`);
+          target.setAttribute("filter", `url(#${blurId})`);
         }
         if (animationMarkup) target.insertAdjacentHTML("beforeend", animationMarkup);
       });
@@ -496,7 +507,7 @@ function buildTextivoAnimatedSVG() {
     const shadowColor = shadowValue.match(/#[0-9a-f]{3,8}/i)?.[0] || "#000000";
     const shadowFilter = shadowValue !== "none"
       ? `<filter id="textivo-shadow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceAlpha" stdDeviation="${Math.max(0,(shadowNumbers[2]||0)/2)}" result="blur"/><feOffset in="blur" dx="${shadowNumbers[0]||0}" dy="${shadowNumbers[1]||0}" result="offset"/><feFlood flood-color="${svgEscape(shadowColor)}" flood-opacity=".75" result="color"/><feComposite in="color" in2="offset" operator="in" result="shadow"/><feMerge><feMergeNode in="shadow"/><feMergeNode in="SourceGraphic"/></feMerge></filter>` : "";
-    const defs = `<defs>${shadowFilter}<style><![CDATA[
+    const defs = `<defs>${shadowFilter}${blurFilters.join("")}<style><![CDATA[
       text{dominant-baseline:auto}
       .svg-unit{white-space:pre}
     ]]></style></defs>`;
