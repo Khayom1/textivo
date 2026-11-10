@@ -143,7 +143,7 @@ function sanitizeEditorHTML(input){
  const parser=new DOMParser(),doc=parser.parseFromString(String(input||""),"text/html");
  const tags=new Set(["DIV","SPAN","B","STRONG","I","EM","U","S","BR"]);
  const styles=new Set(["color","background-color","font-family","font-size","font-weight","font-style","text-decoration","letter-spacing","word-spacing","text-shadow"]);
- const safe=v=>!/(url\\s*\\(|expression\\s*\\(|javascript:|@import|[<>])/i.test(v);
+ const safe=v=>!/(url\s*\(|expression\s*\(|javascript:|@import|[<>])/i.test(v);
  function clean(node){
   if(node.nodeType===Node.TEXT_NODE)return document.createTextNode(node.nodeValue||"");
   if(node.nodeType!==Node.ELEMENT_NODE)return document.createDocumentFragment();
