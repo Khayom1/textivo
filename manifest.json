@@ -1,9 +1,13 @@
 {
-  "name": "Textivo Typography Studio v10",
+  "name": "Textivo — Typography & Motion Studio",
   "short_name": "Textivo",
   "start_url": "./",
+  "scope": "./",
   "display": "standalone",
+  "orientation": "any",
   "background_color": "#09090f",
   "theme_color": "#09090f",
-  "description": "Offline typography and text design studio"
+  "description": "Create, style, animate, and export typography in a free multilingual browser studio.",
+  "lang": "en",
+  "categories": ["design", "graphics", "productivity"]
 }
