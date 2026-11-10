@@ -507,7 +507,13 @@ $("svgBtn").addEventListener("click", exportTextivoSVG); $("pngBtn").addEventLis
  const firstY=(canvas.height-(rows.length-1)*lineHeight)/2;
  const alignment=$("align").value;
  function collect(node,inherited){
-  if(node.nodeType===Node.TEXT_NODE){if(node.nodeValue)inherited.push({text:node.nodeValue,style:{...getComputedStyle(node.parentElement)}});return}
+  if(node.nodeType===Node.TEXT_NODE){
+   if(node.nodeValue){
+    const cs=getComputedStyle(node.parentElement);
+    inherited.push({text:node.nodeValue,style:{fontSize:cs.fontSize,fontFamily:cs.fontFamily,fontWeight:cs.fontWeight,fontStyle:cs.fontStyle,color:cs.color,backgroundColor:cs.backgroundColor,letterSpacing:cs.letterSpacing,textDecorationLine:cs.textDecorationLine,textShadow:cs.textShadow}});
+   }
+   return;
+  }
   if(node.nodeType!==Node.ELEMENT_NODE)return;
   [...node.childNodes].forEach(child=>collect(child,inherited));
  }
