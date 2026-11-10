@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#09090f"><title>Textivo — Typography Studio</title>
+<link rel="manifest" href="manifest.json"><link rel="stylesheet" href="css/style.css?v=9">
+</head>
+<body>
+<header><a class="logo">textivo<span>.</span></a><select id="language" aria-label="Language"><option value="en">English</option><option value="ru">Русский</option><option value="tg">Тоҷикӣ</option></select><button id="saveBtn" class="primary">Save project</button></header>
+<main>
+<section class="hero"><small>PROFESSIONAL TYPOGRAPHY STUDIO</small><h1 id="heroTitle">Your text.<br><span>Your rules.</span></h1><p id="heroSub">Design every character exactly the way you imagine it.</p></section>
+<div class="layout">
+<div>
+<section class="panel">
+<div class="heading"><h2 id="workspaceTitle">Text workspace</h2><span class="tag" id="workspaceTag">STEP 1 · WRITE</span></div>
+<label id="writeLabel">Add your lines in order</label><div id="editor" class="editor"><div class="text-line" contenteditable="true" spellcheck="false">Create something amazing.</div></div><button id="addLine" class="add-line" type="button">＋ Add line</button><p class="hint" id="lineHint">Each line is typed, erased, then the next line starts.</p>
+<div class="how-to-select" role="note">
+<strong id="selectGuideTitle">Style any word or letter</strong>
+<ol>
+<li id="selectGuide1">Touch and hold a word or letter in the text above.</li>
+<li id="selectGuide2">Drag the handles to select exactly what you want.</li>
+<li id="selectGuide3">Choose font, size and colors below.</li>
+<li id="selectGuide4">Tap “Apply to selected text”.</li>
+</ol>
+</div>
+<hr><div class="heading"><h2 id="selectionTitle">Selection styling</h2><span class="tag" id="selectionTag">STEP 2 · STYLE</span></div>
+<div class="toolbar"><button data-cmd="bold"><b>B</b></button><button data-cmd="italic"><i>I</i></button><button data-cmd="underline"><u>U</u></button><button data-cmd="strikeThrough"><s>S</s></button></div>
+<div class="grid2">
+<div><label id="fontLabel">Font family</label><select id="font"><option>Arial</option><option>Georgia</option><option>Verdana</option><option>Impact</option><option>Courier New</option><option>Times New Roman</option><option>Trebuchet MS</option><option>monospace</option><option>serif</option></select></div>
+<div><label id="sizeLabel">Font size (px)</label><input id="size" type="number" min="6" max="200" value="32"></div>
+<div><label id="colorLabel">Text color</label><input id="color" type="color" value="#ffffff"></div>
+<div><label id="highlightLabel">Text background (highlight)</label><input id="highlight" type="color" value="#a78bfa">
+<label class="checkline compact-check"><input id="transparentHighlight" type="checkbox"><span id="transparentHighlightLabel">No background for selected text</span></label></div>
+<div><label id="spacingLabel">Letter spacing (px)</label><input id="spacing" type="number" min="-10" max="50" value="0"></div>
+<div><label id="wordSpacingLabel">Word spacing (px)</label><input id="wordSpacing" type="number" min="-10" max="100" value="0"></div>
+<div><label id="weightLabel">Font weight</label><select id="weight"><option value="400">Regular</option><option value="500">Medium</option><option value="600">Semi-bold</option><option value="700">Bold</option><option value="900">Black</option></select></div>
+<div><label id="alignLabel">Alignment</label><select id="align"><option value="left">Left</option><option value="center" selected>Center</option><option value="right">Right</option><option value="justify">Justify</option></select></div>
+</div>
+<div class="toolbar actionrow"><button id="applyStyle" class="primary">Apply to selected text</button><button id="clearStyle">Clear style</button><button id="selectAll">Select all</button></div>
+<p class="hint" id="selectionHelp">Your changes affect only the selected characters.</p>
+</section>
+<section class="panel"><div class="heading"><h2 id="canvasTitle">Canvas & background</h2></div>
+<div class="grid2"><div><label id="bgLabel">Canvas background (all text)</label><input id="canvasBg" type="color" value="#20202b"></div><div><label id="defaultColorLabel">Default text color (unformatted text)</label><input id="defaultColor" type="color" value="#ffffff"></div></div><label class="checkline"><input id="transparentBg" type="checkbox"><span id="transparentBgLabel">No background — transparent canvas</span></label>
+<label id="shadowLabel">Text shadow</label><select id="shadow"><option value="none">None</option><option value="0 3px 8px #000">Soft shadow</option><option value="0 0 12px #a78bfa">Purple glow</option><option value="0 0 15px #00eaff">Neon cyan</option></select></section>
+</div>
+<div>
+<section class="panel"><div class="heading"><h2 id="previewTitle">Live design preview</h2><span class="tag" id="previewTag">LIVE PREVIEW</span></div><div class="preview" id="preview"><div id="previewText"></div></div><p class="hint" id="previewHint">Your formatted text appears here.</p>
+<div class="toolbar"><button id="undoBtn">↶ Undo</button><button id="redoBtn">↷ Redo</button><button id="resetBtn">Reset</button></div></section>
+<section class="panel"><div class="heading"><h2 id="animationTitle">Text animation engine</h2><span class="tag">MOTION</span></div>
+
+
+<label id="linePauseLabel">Pause between lines (ms)</label><input id="linePause" type="range" min="0" max="10000" value="500"><div class="hint" id="linePauseValue">500 ms</div>
+
+<label id="deletePauseLabel">Pause before exit (ms)</label><input id="deletePause" type="range" min="0" max="10000" value="1500"><div class="hint" id="deletePauseValue">1500 ms</div>
+<label id="modeLabel">Animation mode</label><select id="loopMode"><option value="once">Play once</option><option value="loop">Loop forever</option><option value="type">Typing only</option><option value="delete">Deleting only</option></select>
+<div class="motion-settings"><div class="motion-intro" id="motionIntro">Choose what moves, how it enters and exits, and how fast each part appears.</div><div class="grid2">
+<div><label id="animateByLabel" for="animateBy">Animate by</label><select id="animateBy"><option value="line">Whole line</option><option value="word">Word by word</option><option value="character">Character by character</option></select></div>
+<div><label id="entranceLabel" for="entranceEffect">Entrance effect</label><select id="entranceEffect"><option value="fade">Fade in</option><option value="rise">Rise up</option><option value="slide-left">Slide from left</option><option value="zoom">Zoom in</option><option value="blur">Blur in</option><option value="pop">Pop</option><option value="none">No effect</option></select></div>
+<div><label id="exitLabel" for="exitEffect">Exit effect</label><select id="exitEffect"><option value="fade">Fade out</option><option value="drop">Drop down</option><option value="slide-right">Slide right</option><option value="zoom">Zoom out</option><option value="blur">Blur out</option><option value="none">No effect</option></select></div>
+<div><label id="unitDurationLabel" for="unitDuration">Movement duration (ms)</label><input id="unitDuration" type="range" min="100" max="2500" step="50" value="500"><div class="hint" id="unitDurationValue">500 ms</div></div>
+<div><label id="unitDelayLabel" for="unitDelay">Delay between parts (ms)</label><input id="unitDelay" type="range" min="0" max="2000" step="25" value="120"><div class="hint" id="unitDelayValue">120 ms</div></div></div></div>
+
+
+
+<div class="animation-screen" id="animationScreen">Textivo</div><p class="hint" id="animationStatus" aria-live="polite">Ready</p><div class="toolbar actionrow"><button id="playBtn" class="primary">▶ Play animation</button><button id="stopBtn">■ Stop</button></div></section>
+<section class="panel"><div class="heading"><h2 id="exportTitle">Export & projects</h2></div><div class="toolbar"><button id="copyBtn">Copy text</button><button id="htmlBtn">Export HTML</button><button id="svgBtn">Export SVG</button><button id="pngBtn">Export PNG</button></div><p class="hint" id="exportHint">Projects are saved locally on this device. No account required.</p></section>
+</div></div></main>
+<footer>TEXTIVO · <span id="authorLabel">Created by</span> <strong>Khayom Abdurahmonov</strong> · Independent project</footer>
+<script src="js/app.js?v=9" defer></script><script>if('serviceWorker' in navigator && location.protocol!=='file:') navigator.serviceWorker.register('./sw.js?v=9',{updateViaCache:'none'}).then(reg=>reg.update()).catch(()=>{});</script>
+</body></html>

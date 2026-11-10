@@ -1,0 +1,9 @@
+{
+  "name": "Textivo Typography Studio v7",
+  "short_name": "Textivo",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#09090f",
+  "theme_color": "#09090f",
+  "description": "Offline typography and text design studio"
+}

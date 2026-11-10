@@ -1,0 +1,32 @@
+*{box-sizing:border-box}body{margin:0;background:#09090f;color:#f7f7fb;font-family:Arial,sans-serif}button,input,select{font:inherit}button{cursor:pointer;background:#20202b;color:white;border:1px solid #30303d;border-radius:9px;padding:11px 13px}button:active{transform:scale(.98)}header{min-height:64px;padding:10px 18px;border-bottom:1px solid #292938;display:flex;align-items:center;gap:12px;justify-content:space-between;position:sticky;top:0;background:#09090fee;z-index:5}.logo{font-size:25px;font-weight:900;color:white;text-decoration:none;letter-spacing:-1px}.logo span,.hero h1 span{color:#a78bfa}.primary{background:#a78bfa;color:#130d20;border:0;font-weight:700}select,input[type=number]{width:100%;background:#1c1c28;color:white;border:1px solid #30303d;border-radius:9px;padding:11px;min-height:42px}input[type=color]{width:100%;height:44px;background:#1c1c28;border:1px solid #30303d;border-radius:9px;padding:4px}input[type=range]{width:100%;accent-color:#a78bfa}main{max-width:1200px;margin:auto;padding:25px 16px 55px}.hero{margin:20px 0 28px}.hero small,.tag{color:#a78bfa;letter-spacing:2px;font-size:10px;font-weight:bold}.hero h1{font-size:clamp(38px,7vw,60px);line-height:1.04;letter-spacing:-2px;margin:12px 0}.hero p,.hint{color:#9999aa;font-size:13px;line-height:1.5}.layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}.panel{background:#13131c;border:1px solid #292938;border-radius:16px;padding:18px;margin-bottom:16px;min-width:0}.heading{display:flex;justify-content:space-between;align-items:center;margin-bottom:17px}h2{font-size:16px;margin:0}label{display:block;color:#b8b8c8;font-size:12px;margin:13px 0 7px}.editor{min-height:170px;background:#20202b;border:1px solid #30303d;border-radius:11px;padding:15px;outline:none;overflow-wrap:anywhere;font-size:25px;line-height:1.5}.editor:focus{border-color:#a78bfa}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.toolbar{display:flex;flex-wrap:wrap;gap:8px;margin-top:13px}.toolbar button{min-width:42px}.actionrow button{flex:1}.preview{min-height:220px;border-radius:12px;display:flex;align-items:center;justify-content:center;padding:20px;overflow:hidden;background:#20202b}#previewText{white-space:pre-wrap;overflow-wrap:anywhere;text-align:center;width:100%;font-size:32px}.animation-screen{min-height:150px;background:#09090f;border:1px solid #292938;border-radius:11px;padding:15px;display:flex;align-items:center;justify-content:center;text-align:center;overflow-wrap:anywhere;font-size:25px;margin-top:12px}hr{border:0;border-top:1px solid #292938;margin:19px 0}footer{text-align:center;color:#9999aa;font-size:11px;padding:25px;border-top:1px solid #292938}footer strong{color:#a78bfa}@media(max-width:760px){.layout{grid-template-columns:1fr}.panel{padding:15px}.hero{margin-top:15px}header{gap:8px}.logo{font-size:22px}header select{max-width:125px}header button{padding:10px;font-size:12px}}
+.editor>div{min-height:1.5em;white-space:pre-wrap;overflow-wrap:anywhere}.add-line{width:100%;margin-top:10px;border:1px dashed #8f72dc;background:#191522;color:#c8b5ff;font-weight:700}.add-line:focus{outline:2px solid #a78bfa}.animation-screen{white-space:pre-wrap}
+
+/* v5 line editor and animation output */
+.editor>div{min-height:1.5em;white-space:pre-wrap;overflow-wrap:anywhere}
+.add-line{display:block;width:100%;margin-top:10px;border:1px dashed #a78bfa;background:#191522;color:#c8b5ff;font-weight:700;min-height:48px}
+.add-line:focus{outline:2px solid #a78bfa;outline-offset:2px}
+.animation-screen{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.35;min-height:170px;display:block;text-align:center;padding:24px}
+#animationStatus{min-height:20px}
+
+/* v7: each text line is a distinct editable card, not a paragraph inside one field */
+.editor{min-height:0;background:transparent;border:0;border-radius:0;padding:0;outline:none;overflow:visible;font-size:inherit;line-height:normal}
+.editor:focus{border-color:transparent}
+.editor .text-line{display:block;width:100%;min-height:56px;margin:0 0 9px;padding:13px 14px;background:#20202b;border:1px solid #30303d;border-radius:11px;outline:none;white-space:pre-wrap;overflow-wrap:anywhere;font-size:25px;line-height:1.45;letter-spacing:normal}
+.editor .text-line:focus{border-color:#a78bfa;box-shadow:0 0 0 2px #a78bfa22}
+.editor .text-line:empty:before{content:"Type this line…";color:#777787}
+.checkline{display:flex;align-items:center;gap:9px;margin-top:14px;cursor:pointer}.checkline input{width:18px;height:18px;accent-color:#a78bfa}.checkline span{font-size:13px;color:#b8b8c8}
+#previewText .text-line{margin:0 0 8px;padding:0;border:0;background:transparent;min-height:0}
+.add-line{margin-top:2px}
+
+/* v8 usability: visible, numbered selection instructions and clear transparent options */
+.how-to-select{margin:14px 0 16px;padding:13px 14px;border:1px solid #3a3150;border-radius:12px;background:#191522;color:#e9e3ff}
+.how-to-select strong{display:block;font-size:14px;margin-bottom:7px;color:#c7b3ff}
+.how-to-select ol{margin:0;padding-left:21px;color:#c1bdce;font-size:12px;line-height:1.65}
+.how-to-select li{padding:2px 0}
+.compact-check{margin:8px 0 0;padding:7px 8px;border:1px solid #343342;border-radius:8px;background:#191922}
+.compact-check span{font-size:11px}
+#applyStyle{min-height:48px}
+#selectionTitle{line-height:1.35}
+
+/* v9 motion controls */
+.motion-settings{margin-top:16px;padding:14px;border:1px solid #343044;border-radius:12px;background:#191722}.motion-intro{font-size:12px;line-height:1.55;color:#bdb7cc;margin-bottom:8px}.motion-settings select{min-height:42px}.motion-settings input[type=range]{margin-top:5px}.animation-screen .motion-line{width:100%;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.35}.animation-screen span{vertical-align:baseline}
