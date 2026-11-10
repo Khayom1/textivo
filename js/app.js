@@ -5,7 +5,7 @@ const $ = id => document.getElementById(id);
 const editor = $("editor");
 const animationScreen = $("animationScreen");
 let savedRange = null, undoStack = [], redoStack = [], animationToken = 0;
-window.TEXTIVO_BUILD = "v12";
+window.TEXTIVO_BUILD = "v13";
 
 const dict = {
 en: {
@@ -476,7 +476,7 @@ function buildTextivoAnimatedSVG() {
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" version="1.1">
 ${defs}
 ${background}
-<g transform="${shift}">
+<g transform="${shift}"${shadowFilter ? ` filter="url(#textivo-shadow)"` : ""}>
 ${textBlocks.join("\n")}
 </g>
 <g aria-hidden="true">${animations.replace(/repeatCount="1"/g,`repeatCount="${repeat}"`)}</g>
@@ -500,13 +500,52 @@ $("svgBtn").addEventListener("click", exportTextivoSVG); $("pngBtn").addEventLis
  const canvas=document.createElement("canvas"),ctx=canvas.getContext("2d");
  const dimensions={"16:9":[1600,900],"1:1":[1080,1080],"9:16":[1080,1920],"4:5":[1080,1350]};
  [canvas.width,canvas.height]=dimensions[$("canvasPreset").value]||dimensions["16:9"];
- const scale=Math.min(canvas.width/1600,canvas.height/900);
- if(!hasTransparentBackground()){ctx.fillStyle=$("canvasBg").value;ctx.fillRect(0,0,canvas.width,canvas.height);}
- ctx.fillStyle=$("defaultColor").value;ctx.textAlign=$("align").value==="left"?"left":$("align").value==="right"?"right":"center";
- ctx.font=`${$("weight").value} ${(Number($("size").value)||32)*scale}px "${$("font").value}"`;
- const rows=[...editor.children],lineHeight=Math.max((Number($("size").value)||32)*scale*1.65,(canvas.height-100)/Math.max(rows.length,1));
+ const scale=Math.min(canvas.width/1600,canvas.height/900),rows=[...editor.children];
+ if(!hasTransparentBackground()){ctx.fillStyle=$("canvasBg").value;ctx.fillRect(0,0,canvas.width,canvas.height)}
+ const baseSize=(Number($("size").value)||32)*scale;
+ const lineHeight=Math.max(baseSize*1.7,(canvas.height-100*scale)/Math.max(rows.length,1));
  const firstY=(canvas.height-(rows.length-1)*lineHeight)/2;
- rows.forEach((row,i)=>ctx.fillText(row.innerText,ctx.textAlign==="left"?70*scale:ctx.textAlign==="right"?canvas.width-70*scale:canvas.width/2,firstY+i*lineHeight,canvas.width-100*scale));
+ const alignment=$("align").value;
+ function collect(node,inherited){
+  if(node.nodeType===Node.TEXT_NODE){if(node.nodeValue)inherited.push({text:node.nodeValue,style:{...getComputedStyle(node.parentElement)}});return}
+  if(node.nodeType!==Node.ELEMENT_NODE)return;
+  [...node.childNodes].forEach(child=>collect(child,inherited));
+ }
+ rows.forEach((row,index)=>{
+  const runs=[];collect(row,runs);
+  if(!runs.length)return;
+  const prepared=runs.map(run=>{
+   const st=run.style,px=Math.max(6,parseFloat(st.fontSize)||baseSize/scale)*scale;
+   const font=[st.fontStyle&&st.fontStyle!=="normal"?st.fontStyle:"",st.fontWeight||$("weight").value,px+"px",st.fontFamily||$("font").value].filter(Boolean).join(" ");
+   ctx.font=font;
+   const letter=parseFloat(st.letterSpacing)||0;
+   const width=ctx.measureText(run.text).width+Math.max(0,run.text.length-1)*letter*scale;
+   return {...run,font,width,px,letter};
+  });
+  const total=prepared.reduce((sum,run)=>sum+run.width,0),maxWidth=canvas.width-100*scale;
+  const fit=Math.min(1,maxWidth/Math.max(total,1)),rowWidth=total*fit;
+  let x=alignment==="left"||alignment==="justify"?50*scale:alignment==="right"?canvas.width-50*scale-rowWidth:(canvas.width-rowWidth)/2;
+  const y=firstY+index*lineHeight;
+  prepared.forEach(run=>{
+   const st=run.style,scaledFont=run.font.replace(/([0-9.]+)px/,(_,n)=>(Number(n)*fit)+"px");
+   ctx.font=scaledFont;ctx.textBaseline="middle";ctx.textAlign="left";
+   const width=run.width*fit,px=run.px*fit;
+   if(st.backgroundColor&&st.backgroundColor!=="rgba(0, 0, 0, 0)"&&st.backgroundColor!=="transparent"){
+    ctx.fillStyle=st.backgroundColor;ctx.fillRect(x,y-px*.62,width,px*1.25);
+   }
+   ctx.fillStyle=st.color||$("defaultColor").value;
+   ctx.shadowColor="transparent";ctx.shadowBlur=0;
+   if(run.letter){
+    let cx=x;for(const ch of run.text){ctx.fillText(ch,cx,y);cx+=ctx.measureText(ch).width+run.letter*scale*fit}
+   }else ctx.fillText(run.text,x,y);
+   const decoration=st.textDecorationLine||st.textDecoration||"";
+   if(/underline|line-through/.test(decoration)){
+    ctx.fillStyle=st.color||$("defaultColor").value;ctx.fillRect(x,y+(decoration.includes("underline")?px*.42:0),width,Math.max(1,px*.055));
+    if(decoration.includes("line-through"))ctx.fillRect(x,y, width,Math.max(1,px*.055));
+   }
+   x+=width;
+  });
+ });
  const a=document.createElement("a");a.download="textivo.png";a.href=canvas.toDataURL("image/png");a.click();
 });
 
@@ -677,8 +716,9 @@ $("animationStatus").textContent=t("ready");
     });
     return {
       format: "textivo-project",
-      schemaVersion: 1,
+      schemaVersion: 2,
       app: "Textivo",
+      author: "Khayom Abdurahmonov",
       exportedAt: new Date().toISOString(),
       language: $("language")?.value || "en",
       content: {
