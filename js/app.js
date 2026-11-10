@@ -364,8 +364,10 @@ function svgTextNodes(row, mode, inherited) {
   const units = [];
   const makeTspan = (text, style, cls) => {
     const safe = svgEscape(text);
+    const names={"fontFamily":"font-family","fontSize":"font-size","fontWeight":"font-weight","fontStyle":"font-style","textDecoration":"text-decoration","letterSpacing":"letter-spacing","wordSpacing":"word-spacing","strokeWidth":"stroke-width"};
+    const normalized=Object.fromEntries(Object.entries(style).map(([key,value])=>[names[key]||key,value]));
     units.push({text, style, cls});
-    return `<tspan class="${cls}" ${svgAttrs(style)}>${safe}</tspan>`;
+    return `<tspan class="${cls}" ${svgAttrs(normalized)}>${safe}</tspan>`;
   };
   const walk = (node, parentStyle) => {
     if (node.nodeType === Node.TEXT_NODE) {
@@ -382,7 +384,9 @@ function svgTextNodes(row, mode, inherited) {
     const children = Array.from(node.childNodes).map(child => walk(child, style)).join("");
     return children;
   };
-  const markup = Array.from(row.childNodes).map(node => walk(node, inherited)).join("");
+  const rowStyle=getComputedStyle(row);
+  const rowInherited={...inherited,fontFamily:rowStyle.fontFamily||inherited.fontFamily,fontSize:rowStyle.fontSize||inherited.fontSize,fontWeight:rowStyle.fontWeight||inherited.fontWeight,fontStyle:rowStyle.fontStyle||inherited.fontStyle,textDecoration:rowStyle.textDecorationLine||inherited.textDecoration,letterSpacing:rowStyle.letterSpacing||inherited.letterSpacing,wordSpacing:rowStyle.wordSpacing||inherited.wordSpacing,fill:svgColor(rowStyle.color,inherited.fill),stroke:rowStyle.webkitTextStrokeColor||inherited.stroke,strokeWidth:rowStyle.webkitTextStrokeWidth||inherited.strokeWidth};
+  const markup = Array.from(row.childNodes).map(node => walk(node, rowInherited)).join("");
   return {markup, units};
 }
 function svgAnimationMarkup(targetId, effect, begin, duration, exit=false, repeat="1") {
@@ -596,7 +600,7 @@ function getLineElements(){return [...editor.children].filter(row=>row.innerText
 function makeCharacterSpans(line){
  const result=[],props=["fontFamily","fontSize","fontWeight","fontStyle","textDecoration","color","backgroundColor","letterSpacing","wordSpacing","textShadow"];
  function visit(node,inherited={}){if(node.nodeType===Node.TEXT_NODE){for(const ch of node.nodeValue){const s=document.createElement("span");s.textContent=ch;props.forEach(p=>{if(inherited[p])s.style[p]=inherited[p]});result.push(s)}return}if(node.nodeType!==Node.ELEMENT_NODE)return;const cs=getComputedStyle(node),next={...inherited};props.forEach(p=>{const v=cs[p];if(v&&v!=="normal"&&v!=="rgba(0, 0, 0, 0)")next[p]=v});node.childNodes.forEach(child=>visit(child,next))}
- line.childNodes.forEach(child=>visit(child,{}));return result;
+ const base={},rootStyle=getComputedStyle(line);props.forEach(p=>{const v=rootStyle[p];if(v&&v!=="normal"&&v!=="rgba(0, 0, 0, 0)")base[p]=v});line.childNodes.forEach(child=>visit(child,base));return result;
 }
 function splitIntoUnits(line,kind){if(kind==="line"){const b=document.createElement("div");b.className="motion-line";b.innerHTML=line.innerHTML;return [b]}const chars=makeCharacterSpans(line);if(kind==="character")return chars;const words=[];let current=null;chars.forEach(ch=>{const space=/^\s+$/.test(ch.textContent);if(space){if(current)current.appendChild(ch);else{current=document.createElement("span");current.appendChild(ch);words.push(current);current=null}}else{if(!current){current=document.createElement("span");words.push(current)}current.appendChild(ch)}});return words.filter(x=>x.textContent.length)}
 function inFrames(e){return ({fade:[{opacity:0},{opacity:1}],rise:[{opacity:0,transform:"translateY(28px)"},{opacity:1,transform:"translateY(0)"}],"slide-left":[{opacity:0,transform:"translateX(-35px)"},{opacity:1,transform:"translateX(0)"}],zoom:[{opacity:0,transform:"scale(.55)"},{opacity:1,transform:"scale(1)"}],blur:[{opacity:0,filter:"blur(10px)"},{opacity:1,filter:"blur(0)"}],pop:[{opacity:0,transform:"scale(.65)"},{opacity:1,transform:"scale(1.12)",offset:.72},{opacity:1,transform:"scale(1)"}]})[e]||[{opacity:1},{opacity:1}]}
