@@ -9,5 +9,17 @@
   "theme_color": "#09090f",
   "description": "Create, style, animate, and export typography in a free multilingual browser studio.",
   "lang": "en",
-  "categories": ["design", "graphics", "productivity"]
+  "categories": [
+    "design",
+    "graphics",
+    "productivity"
+  ],
+  "icons": [
+    {
+      "src": "assets/textivo-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
 }
