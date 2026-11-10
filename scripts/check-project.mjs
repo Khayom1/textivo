@@ -31,6 +31,8 @@ assert.match(js, /function sanitizeEditorHTML/, "Project import must sanitize ri
 assert.match(js, /lastRememberedHTML/, "Undo history must track the previous editor state");
 assert.match(js, /textBlocks\.map\(text=>text\.outerHTML\)/, "SVG export must serialize positioned text nodes");
 assert.match(js, /wordSpacing/, "Word spacing must be included in export logic");
+assert.match(js, /blurFilters\\.push/, "SVG blur must use a real Gaussian blur filter");
+assert.doesNotMatch(js, /const\\s+const/, "JavaScript must not contain duplicated const declarations");
 assert.match(css, /prefers-reduced-motion/, "Reduced-motion preferences must be respected");
 
 const appVersion = js.match(/TEXTIVO_BUILD = ["']v(\d+)["']/)?.[1];
