@@ -8,7 +8,7 @@
 
 **A free, multilingual typography and motion-design studio that runs in your browser — no account, no paid API, no complicated software.**
 
-[![Open Live Studio](https://img.shields.io/badge/OPEN-REPOSITORY-a78bfa?style=for-the-badge)](https://github.com/Khayom1/textivo)
+[![Open Repository](https://img.shields.io/badge/OPEN-REPOSITORY-a78bfa?style=for-the-badge)](https://github.com/Khayom1/textivo)
 [![Languages](https://img.shields.io/badge/LANGUAGES-EN%20%7C%20RU%20%7C%20TG-20202b?style=for-the-badge)](#-languages)
 [![Offline](https://img.shields.io/badge-OFFLINE--READY-20202b?style=for-the-badge)](#-privacy--offline-first)
 
@@ -55,7 +55,7 @@ It is built for people who want polished text graphics without needing Photoshop
 
 ## ✦ Get started
 
-### Use Textivo online
+### Open in your browser
 
 A hosted demo is not configured yet. Follow the local setup below to run Textivo in your browser; the app can then be installed where the browser supports PWA installation.
 
@@ -75,13 +75,13 @@ Open `http://127.0.0.1:8080`.
 
 ```bash
 pkg update
-pkg install git python
+pkg install git python nodejs-lts
 git clone https://github.com/Khayom1/textivo.git
 cd textivo
 python -m http.server 8080 --bind 127.0.0.1
 ```
 
-Then open `http://127.0.0.1:8080` on the same device. Keep Termux running while using the local server.
+Then open `http://127.0.0.1:8080` on the same device. Keep Termux running while using the local server. See **[TESTING.md](TESTING.md)** for the complete Termux checks and browser test checklist.
 
 ## ✦ Quick workflow
 
