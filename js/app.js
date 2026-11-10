@@ -117,12 +117,17 @@ tg: {
  previewTag:'ПЕШНАМОИШ', ready:"Тайёр",playing:"Сатри навбатӣ иҷро мешавад",finished:"Аниматсия анҷом ёфт",
  motionIntro:"Интихоб кун, ки чӣ ҳаракат кунад, чӣ гуна пайдо ва нопадид шавад ва бо кадом суръат.", animateByLabel:"Аниматсия аз рӯйи",entranceLabel:"Тарзи пайдоиш",exitLabel:"Тарзи нопадидшавӣ",unitDurationLabel:"Давомнокии ҳаракат (мс)",unitDelayLabel:"Таваққуф байни қисмҳо (мс)",animateLine:"Тамоми сатр",animateWord:"Калима ба калима",animateCharacter:"Ҳарф ба ҳарф",effectFadeIn:"Оҳиста пайдо шавад",effectRise:"Аз поён боло",effectSlideLeft:"Аз чап",effectZoomIn:"Калон шавад",effectBlurIn:"Бо хирагӣ пайдо шавад",effectPop:"Ҷаҳиш",effectNone:"Бе эффект",effectFadeOut:"Оҳиста нопадид шавад",effectDrop:"Ба поён фарояд",effectSlideRight:"Ба рост",effectZoomOut:"Хурд шавад",effectBlurOut:"Бо хирагӣ нопадид шавад"
 }};
+Object.assign(dict.en,{templatesLabel:"Start with a template",applyTemplate:"Use template",templatePlaceholder:"Choose a template…",templateQuote:"Quote card",templateAnnouncement:"Announcement",templateStudy:"Study card",templateCreator:"Creator title",templateMinimal:"Minimal statement",canvasPresetLabel:"Canvas format"});
+Object.assign(dict.ru,{templatesLabel:"Начать с шаблона",applyTemplate:"Применить шаблон",templatePlaceholder:"Выберите шаблон…",templateQuote:"Карточка с цитатой",templateAnnouncement:"Объявление",templateStudy:"Учебная карточка",templateCreator:"Заголовок автора",templateMinimal:"Минимализм",canvasPresetLabel:"Формат холста"});
+Object.assign(dict.tg,{templatesLabel:"Оғоз аз қолаб",applyTemplate:"Истифодаи қолаб",templatePlaceholder:"Қолабро интихоб кун…",templateQuote:"Корти иқтибос",templateAnnouncement:"Эълон",templateStudy:"Корти омӯзишӣ",templateCreator:"Сарлавҳаи эҷодӣ",templateMinimal:"Тарҳи минималӣ",canvasPresetLabel:"Андозаи саҳна"});
 function t(key){return (dict[$("language").value]||dict.en)[key]||dict.en[key]||key}
 function translate(lang){
  const d=dict[lang]||dict.en;
  Object.entries(d).forEach(([id,value])=>{const el=$(id);if(el)el.textContent=value});
  const labels={animateBy:[["line","animateLine"],["word","animateWord"],["character","animateCharacter"]],entranceEffect:[["fade","effectFadeIn"],["rise","effectRise"],["slide-left","effectSlideLeft"],["zoom","effectZoomIn"],["blur","effectBlurIn"],["pop","effectPop"],["none","effectNone"]],exitEffect:[["fade","effectFadeOut"],["drop","effectDrop"],["slide-right","effectSlideRight"],["zoom","effectZoomOut"],["blur","effectBlurOut"],["none","effectNone"]]};
  Object.entries(labels).forEach(([id,items])=>items.forEach(([v,k])=>{const o=$(id).querySelector(`option[value="${v}"]`);if(o)o.textContent=d[k]||dict.en[k]}));
+ const templateKeys={ "":"templatePlaceholder",quote:"templateQuote",announcement:"templateAnnouncement",study:"templateStudy",creator:"templateCreator",minimal:"templateMinimal" };
+ Object.entries(templateKeys).forEach(([value,key])=>{const option=$("templateSelect")?.querySelector(`option[value="${value}"]`);if(option)option.textContent=d[key]||dict.en[key]});
  document.documentElement.lang=lang;
 }
 $("language").addEventListener("change",e=>translate(e.target.value));
@@ -161,11 +166,26 @@ function remember(){
  undoStack.push(lastRememberedHTML);if(undoStack.length>80)undoStack.shift();
  lastRememberedHTML=html;redoStack=[];
 }
+const textTemplates={
+ quote:{bg:"#171326",color:"#f5efff",align:"center",html:'<div class="text-line" style="font-size:42px;font-weight:700;color:#f5efff;text-align:center">Your words</div><div class="text-line" style="font-size:42px;font-weight:700;color:#b69aff;text-align:center">matter.</div><div class="text-line" style="font-size:16px;color:#c9bfdc;text-align:center">— Make every line count</div>'},
+ announcement:{bg:"#101f2a",color:"#ffffff",align:"center",html:'<div class="text-line" style="font-size:18px;font-weight:700;color:#58d7e8;text-align:center">BIG NEWS</div><div class="text-line" style="font-size:48px;font-weight:900;color:#ffffff;text-align:center">Something</div><div class="text-line" style="font-size:48px;font-weight:900;color:#58d7e8;text-align:center">is coming.</div><div class="text-line" style="font-size:17px;color:#d0e3e8;text-align:center">Stay tuned for the reveal</div>'},
+ study:{bg:"#14251f",color:"#f1fff5",align:"left",html:'<div class="text-line" style="font-size:16px;font-weight:700;color:#8be0ac">STUDY NOTE</div><div class="text-line" style="font-size:38px;font-weight:900;color:#ffffff">KEY CONCEPT</div><div class="text-line" style="font-size:20px;color:#d5f4df">Write a clear definition or explanation here.</div><div class="text-line" style="font-size:15px;color:#8be0ac">Remember · Review · Apply</div>'},
+ creator:{bg:"#21152a",color:"#ffffff",align:"center",html:'<div class="text-line" style="font-size:16px;font-weight:700;color:#f3a8ff">CREATE / EXPLORE / SHARE</div><div class="text-line" style="font-size:46px;font-weight:900;color:#ffffff">MAKE IT</div><div class="text-line" style="font-size:46px;font-weight:900;color:#d6a5ff">HAPPEN.</div><div class="text-line" style="font-size:16px;color:#e5d8ed">Your next idea starts here</div>'},
+ minimal:{bg:"#f2f0eb",color:"#171717",align:"left",html:'<div class="text-line" style="font-size:17px;color:#777777">A SIMPLE REMINDER</div><div class="text-line" style="font-size:52px;font-weight:900;color:#171717">Less noise.</div><div class="text-line" style="font-size:52px;font-weight:900;color:#7653d6">More meaning.</div>'}
+};
+$("applyTemplate").addEventListener("click",()=>{
+ const template=textTemplates[$("templateSelect").value];
+ if(!template){alert("Choose a template first.");return}
+ editor.innerHTML=template.html;$("canvasBg").value=template.bg;$("defaultColor").value=template.color;$("align").value=template.align;
+ normalizeLines();remember();updatePreview();$("animationScreen").style.background=template.bg;
+});
 function hasTransparentBackground(){return $("transparentBg").checked}
 function updatePreview(){
  $("previewText").innerHTML=editor.innerHTML;
  [...$("previewText").children].forEach(row=>row.removeAttribute("contenteditable"));
  $("preview").style.background=hasTransparentBackground()?"transparent":$("canvasBg").value;
+ const ratio=($("canvasPreset")?.value||"16:9").split(":").map(Number);
+ if(ratio.length===2&&ratio.every(Number.isFinite))$("preview").style.aspectRatio=ratio.join(" / ");
  $("previewText").style.textAlign=$("align").value;
  $("previewText").style.textShadow=$("shadow").value;
  $("previewText").style.color=$("defaultColor").value;
@@ -264,7 +284,7 @@ $("resetBtn").addEventListener("click",()=>{
 });
 
 $("saveBtn").addEventListener("click",()=>{
- const ids=["font","size","color","highlight","transparentHighlight","spacing","wordSpacing","weight","align","shadow","linePause","deletePause","loopMode","animateBy","entranceEffect","exitEffect","unitDuration","unitDelay"],settings={};
+ const ids=["font","size","color","highlight","transparentHighlight","spacing","wordSpacing","weight","align","shadow","linePause","deletePause","loopMode","animateBy","entranceEffect","exitEffect","unitDuration","unitDelay","canvasPreset"],settings={};
  ids.forEach(id=>{const el=$(id);if(el)settings[id]=el.type==="checkbox"?el.checked:el.value});
  const project={format:"textivo-project",schemaVersion:2,app:"Textivo",author:"Khayom Abdurahmonov",savedAt:new Date().toISOString(),html:sanitizeEditorHTML(editor.innerHTML),lang:$("language").value,bg:$("canvasBg").value,transparentBg:hasTransparentBackground(),defaultColor:$("defaultColor").value,align:$("align").value,settings};
  try{const data=JSON.stringify(project);if(data.length>2000000)throw new Error("Project exceeds the 2 MB local-storage limit.");localStorage.setItem("textivo-project-v13",data);localStorage.setItem("textivo-project-v9",data);$("saveBtn").textContent="Saved ✓";setTimeout(()=>$("saveBtn").textContent=t("saveBtn"),1600)}
@@ -607,7 +627,7 @@ try{
   editor.innerHTML=sanitizeEditorHTML(project.html||editor.innerHTML);
   $("language").value=["en","ru","tg"].includes(project.lang)?project.lang:"en";
   $("canvasBg").value=project.bg||"#20202b";$("transparentBg").checked=!!project.transparentBg;$("defaultColor").value=project.defaultColor||"#ffffff";
-  const s=project.settings||{};["font","size","color","highlight","transparentHighlight","spacing","wordSpacing","weight","align","shadow","linePause","deletePause","loopMode","animateBy","entranceEffect","exitEffect","unitDuration","unitDelay"].forEach(id=>{if(s[id]!==undefined&&$(id)){if($(id).type==="checkbox")$(id).checked=!!s[id];else $(id).value=s[id]}});
+  const s=project.settings||{};["font","size","color","highlight","transparentHighlight","spacing","wordSpacing","weight","align","shadow","linePause","deletePause","loopMode","animateBy","entranceEffect","exitEffect","unitDuration","unitDelay","canvasPreset"].forEach(id=>{if(s[id]!==undefined&&$(id)){if($(id).type==="checkbox")$(id).checked=!!s[id];else $(id).value=s[id]}});
  }
 }catch(error){console.warn("Could not restore project",error)}
 normalizeLines();
@@ -694,7 +714,7 @@ $("animationStatus").textContent=t("ready");
       $("canvasBg").value=/^#[0-9a-f]{6}$/i.test(data.content.background||"")?data.content.background:"#20202b";
       $("transparentBg").checked=!!data.content.transparentBackground;
       $("defaultColor").value=/^#[0-9a-f]{6}$/i.test(data.content.defaultColor||"")?data.content.defaultColor:"#ffffff";
-      const allowed=new Set(["font","size","color","highlight","transparentHighlight","spacing","wordSpacing","weight","align","shadow","linePause","deletePause","loopMode","animateBy","entranceEffect","exitEffect","unitDuration","unitDelay"]);
+      const allowed=new Set(["font","size","color","highlight","transparentHighlight","spacing","wordSpacing","weight","align","shadow","linePause","deletePause","loopMode","animateBy","entranceEffect","exitEffect","unitDuration","unitDelay","canvasPreset"]);
       Object.entries(data.settings).forEach(([id,value])=>{if(!allowed.has(id))return;const el=$(id);if(!el)return;if(el.type==="checkbox")el.checked=!!value;else if(el.tagName==="SELECT"&&[...el.options].some(o=>o.value===String(value)))el.value=String(value);else if(el.type==="number"||el.type==="range"){const n=Number(value);if(Number.isFinite(n))el.value=String(Math.max(Number(el.min)||-Infinity,Math.min(Number(el.max)||Infinity,n)))}else if(el.type==="color"&&/^#[0-9a-f]{6}$/i.test(String(value)))el.value=value});
       normalizeLines();translate($("language").value);updatePreview();undoStack=[];redoStack=[];lastRememberedHTML=editor.innerHTML;
       $("animationStatus").textContent="Project imported";alert("Textivo project imported safely.");
