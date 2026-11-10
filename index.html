@@ -13,7 +13,9 @@
 <div>
 <section class="panel">
 <div class="heading"><h2 id="workspaceTitle">Text workspace</h2><span class="tag" id="workspaceTag">STEP 1 · WRITE</span></div>
-<label id="writeLabel">Add your lines in order</label><div id="editor" class="editor"><div class="text-line" contenteditable="true" spellcheck="false">Create something amazing.</div></div><button id="addLine" class="add-line" type="button">＋ Add line</button><p class="hint" id="lineHint">Each line is typed, erased, then the next line starts.</p>
+<label id="writeLabel">Add your lines in order</label>
+<div class="template-tools"><div><label id="templatesLabel" for="templateSelect">Start with a template</label><select id="templateSelect"><option value="">Choose a template…</option><option value="quote">Quote card</option><option value="announcement">Announcement</option><option value="study">Study card</option><option value="creator">Creator title</option><option value="minimal">Minimal statement</option></select></div><button id="applyTemplate" type="button">Use template</button></div>
+<div id="editor" class="editor"><div class="text-line" contenteditable="true" spellcheck="false">Create something amazing.</div></div><button id="addLine" class="add-line" type="button">＋ Add line</button><p class="hint" id="lineHint">Each line is typed, erased, then the next line starts.</p>
 <div class="how-to-select" role="note">
 <strong id="selectGuideTitle">Style any word or letter</strong>
 <ol>
@@ -40,6 +42,7 @@
 <p class="hint" id="selectionHelp">Your changes affect only the selected characters.</p>
 </section>
 <section class="panel"><div class="heading"><h2 id="canvasTitle">Canvas & background</h2></div>
+<label id="canvasPresetLabel" for="canvasPreset">Canvas format</label><select id="canvasPreset"><option value="16:9">Landscape · 16:9</option><option value="1:1">Square · 1:1</option><option value="9:16">Story · 9:16</option><option value="4:5">Portrait · 4:5</option></select>
 <div class="grid2"><div><label id="bgLabel">Canvas background (all text)</label><input id="canvasBg" type="color" value="#20202b"></div><div><label id="defaultColorLabel">Default text color (unformatted text)</label><input id="defaultColor" type="color" value="#ffffff"></div></div><label class="checkline"><input id="transparentBg" type="checkbox"><span id="transparentBgLabel">No background — transparent canvas</span></label>
 <label id="shadowLabel">Text shadow</label><select id="shadow"><option value="none">None</option><option value="0 3px 8px #000">Soft shadow</option><option value="0 0 12px #a78bfa">Purple glow</option><option value="0 0 15px #00eaff">Neon cyan</option></select></section>
 </div>
