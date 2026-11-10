@@ -1,5 +1,5 @@
-const CACHE='textivo-v13';
-const FILES=['./','./index.html','./css/style.css?v=13','./js/app.js?v=13','./manifest.json'];
+const CACHE='textivo-v14';
+const FILES=['./','./index.html','./css/style.css?v=13','./js/app.js?v=13','./manifest.json','./assets/textivo-icon.svg'];
 self.addEventListener('install',event=>event.waitUntil((async()=>{
   const cache=await caches.open(CACHE);
   await cache.addAll(FILES);
@@ -13,7 +13,7 @@ self.addEventListener('activate',event=>event.waitUntil((async()=>{
 self.addEventListener('fetch',event=>{
   if(event.request.method!=='GET')return;
   const url=new URL(event.request.url);
-  const isAppAsset=url.pathname.endsWith('/index.html')||url.pathname.endsWith('/js/app.js')||url.pathname.endsWith('/css/style.css');
+  const isAppAsset=(url.pathname.endsWith('/index.html')||url.pathname.endsWith('/'))||url.pathname.endsWith('/js/app.js')||url.pathname.endsWith('/css/style.css');
   if(isAppAsset){
     event.respondWith((async()=>{
       try{
