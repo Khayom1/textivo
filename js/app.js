@@ -583,7 +583,8 @@ $("svgBtn").addEventListener("click", exportTextivoSVG); $("pngBtn").addEventLis
    ctx.fillStyle=st.color||$("defaultColor").value;
    const shadow=st.textShadow||"none";
    const shadowColor=shadow.match(/rgba?\([^)]+\)|#[0-9a-f]{3,8}|\b[a-z]+\b/i)?.[0]||"transparent";
-   const shadowNumbers=[...shadow.matchAll(/(-?\d+(?:\.\d+)?)px/g)].map(match=>Number(match[1]));
+   const shadowMatch=shadow.match(/^\s*(-?\d+(?:\.\d+)?)(?:px)?\s+(-?\d+(?:\.\d+)?)px\s+(-?\d+(?:\.\d+)?)px/i);
+   const shadowNumbers=shadowMatch?shadowMatch.slice(1).map(Number):[];
    ctx.shadowColor=shadowColor;ctx.shadowOffsetX=(shadowNumbers[0]||0)*scale*fit;ctx.shadowOffsetY=(shadowNumbers[1]||0)*scale*fit;ctx.shadowBlur=(shadowNumbers[2]||0)*scale*fit;
    if(run.letter||run.word){
     let cx=x;for(let i=0;i<run.text.length;i++){
