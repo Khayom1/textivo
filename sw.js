@@ -1,5 +1,5 @@
-const CACHE='textivo-v11';
-const FILES=['./','./index.html','./css/style.css?v=10','./js/app.js?v=10','./manifest.json'];
+const CACHE='textivo-v12';
+const FILES=['./','./index.html','./css/style.css?v=12','./js/app.js?v=12','./manifest.json'];
 self.addEventListener('install',event=>event.waitUntil((async()=>{
   const cache=await caches.open(CACHE);
   await cache.addAll(FILES);

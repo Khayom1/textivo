@@ -4,7 +4,7 @@ const $ = id => document.getElementById(id);
 const editor = $("editor");
 const animationScreen = $("animationScreen");
 let savedRange = null, undoStack = [], redoStack = [], animationToken = 0;
-window.TEXTIVO_BUILD = "v11";
+window.TEXTIVO_BUILD = "v12";
 
 const dict = {
 en: {
@@ -265,12 +265,203 @@ $("copyBtn").addEventListener("click",async()=>{
 });
 $("htmlBtn").addEventListener("click",()=>download("textivo.html",
  `<!doctype html><meta charset="utf-8"><div>${editor.innerHTML}</div>`,"text/html"));
-$("svgBtn").addEventListener("click",()=>{
- const lines=[...editor.children].map((row,i)=>`<text x="600" y="${180+i*70}" text-anchor="middle">${escapeXML(row.innerText)}</text>`).join("");
- download("textivo.svg",`<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700">${hasTransparentBackground()?"":`<rect width="100%" height="100%" fill="${$("canvasBg").value}"/>`}<g fill="${$("defaultColor").value}" font-family="${escapeXML($("font").value)}" font-size="${Number($("size").value)||32}">${lines}</g></svg>`,"image/svg+xml");
-});
-function escapeXML(value){return String(value).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
-$("pngBtn").addEventListener("click",()=>{
+
+/* TEXTIVO_SVG_EXPORT_V12 — native vector + SMIL animation */
+function svgEscape(value) {
+  return String(value ?? "").replace(/[&<>"']/g, ch => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&apos;"
+  }[ch]));
+}
+function svgNum(value, fallback=0) {
+  const n = Number.parseFloat(value);
+  return Number.isFinite(n) ? n : fallback;
+}
+function svgAttr(name, value) {
+  return `${name}="${svgEscape(value)}"`;
+}
+function svgColor(value, fallback="none") {
+  if (!value || value === "transparent" || value === "rgba(0, 0, 0, 0)") return fallback;
+  return value;
+}
+function svgStyleAttributes(element, inherited) {
+  const cs = getComputedStyle(element);
+  const attrs = {
+    "font-family": cs.fontFamily || inherited.fontFamily,
+    "font-size": cs.fontSize || inherited.fontSize,
+    "font-weight": cs.fontWeight || inherited.fontWeight,
+    "font-style": cs.fontStyle || inherited.fontStyle,
+    "text-decoration": cs.textDecorationLine && cs.textDecorationLine !== "none" ? cs.textDecorationLine : inherited.textDecoration,
+    "letter-spacing": cs.letterSpacing !== "normal" ? cs.letterSpacing : inherited.letterSpacing,
+    "word-spacing": cs.wordSpacing !== "normal" ? cs.wordSpacing : inherited.wordSpacing,
+    "fill": svgColor(cs.color, inherited.fill),
+    "stroke": cs.webkitTextStrokeColor && cs.webkitTextStrokeColor !== "rgba(0, 0, 0, 0)" ? cs.webkitTextStrokeColor : inherited.stroke,
+    "stroke-width": cs.webkitTextStrokeWidth && cs.webkitTextStrokeWidth !== "0px" ? cs.webkitTextStrokeWidth : inherited.strokeWidth,
+    "paint-order": "stroke fill"
+  };
+  if (cs.opacity && cs.opacity !== "1") attrs.opacity = cs.opacity;
+  return attrs;
+}
+function svgAttrs(obj) {
+  return Object.entries(obj).filter(([,v]) => v != null && v !== "").map(([k,v]) => svgAttr(k,v)).join(" ");
+}
+function svgTextNodes(row, mode, inherited) {
+  const units = [];
+  const makeTspan = (text, style, cls) => {
+    const safe = svgEscape(text);
+    units.push({text, style, cls});
+    return `<tspan class="${cls}" ${svgAttrs(style)}>${safe}</tspan>`;
+  };
+  const walk = (node, parentStyle) => {
+    if (node.nodeType === Node.TEXT_NODE) {
+      const value = node.nodeValue || "";
+      if (!value) return "";
+      if (mode === "line") return makeTspan(value, parentStyle, "svg-unit");
+      if (mode === "word") {
+        return value.match(/\s+|[^\s]+/gu)?.map(part => makeTspan(part, parentStyle, "svg-unit")).join("") || "";
+      }
+      return Array.from(value).map(ch => makeTspan(ch, parentStyle, "svg-unit")).join("");
+    }
+    if (node.nodeType !== Node.ELEMENT_NODE) return "";
+    const style = svgStyleAttributes(node, parentStyle);
+    const children = Array.from(node.childNodes).map(child => walk(child, style)).join("");
+    return children;
+  };
+  const markup = Array.from(row.childNodes).map(node => walk(node, inherited)).join("");
+  return {markup, units};
+}
+function svgAnimationMarkup(targetId, effect, begin, duration, exit=false, repeat="1") {
+  if (!effect || effect === "none" || duration <= 0) return "";
+  const sec = Math.max(0.001, duration / 1000);
+  const timing = `begin="${(begin/1000).toFixed(3)}s" dur="${sec.toFixed(3)}s" fill="freeze" repeatCount="${repeat}"`;
+  const fade = exit ? `from="1" to="0"` : `from="0" to="1"`;
+  const opacity = `<animate attributeName="opacity" ${fade} ${timing}/>`;
+  const transforms = {
+    rise: exit ? ["translate(0 0)","translate(0 24)"] : ["translate(0 24)","translate(0 0)"],
+    "slide-left": exit ? ["translate(0 0)","translate(-32 0)"] : ["translate(-32 0)","translate(0 0)"],
+    "slide-right": exit ? ["translate(0 0)","translate(32 0)"] : ["translate(32 0)","translate(0 0)"],
+    drop: ["translate(0 0)","translate(0 28)"],
+    zoom: exit ? ["scale(1)","scale(.65)"] : ["scale(.65)","scale(1)"],
+    pop: ["scale(.65)","scale(1.08)"]
+  };
+  const pair = transforms[effect];
+  const transform = pair ? `<animateTransform attributeName="transform" type="${effect==="zoom"||effect==="pop"?"scale":"translate"}" ${effect==="zoom"||effect==="pop"?`from="${pair[0].replace("scale(","").replace(")","")}" to="${pair[1].replace("scale(","").replace(")","")}"`:`from="${pair[0].replace("translate(","").replace(")","")}" to="${pair[1].replace("translate(","").replace(")","")}"`} ${timing}/>` : "";
+  const blur = effect === "blur" ? `<animate attributeName="opacity" ${fade} ${timing}/>` : "";
+  return opacity + transform + blur;
+}
+function buildTextivoAnimatedSVG() {
+  const rows = Array.from(editor.children).filter(row => (row.textContent || "").length);
+  if (!rows.length) throw new Error("There is no text to export.");
+  const mode = $("loopMode").value;
+  const unitMode = $("animateBy").value;
+  const entrance = $("entranceEffect").value;
+  const exit = $("exitEffect").value;
+  const duration = Math.max(0, svgNum($("unitDuration").value, 500));
+  const delay = Math.max(0, svgNum($("unitDelay").value, 120));
+  const linePause = Math.max(0, svgNum($("linePause").value, 500));
+  const deletePause = Math.max(0, svgNum($("deletePause").value, 1500));
+  const fontSize = Math.max(6, svgNum($("size").value, 32));
+  const rootStyle = {
+    "font-family": $("font").value || "Arial",
+    "font-size": `${fontSize}px`,
+    "font-weight": $("weight").value || "400",
+    "text-anchor": $("align").value === "left" ? "start" : $("align").value === "right" ? "end" : "middle",
+    "fill": $("defaultColor").value || "#ffffff",
+    "letter-spacing": `${svgNum($("spacing").value)}px`,
+    "word-spacing": `${svgNum($("wordSpacing").value)}px`
+  };
+  const textBlocks = [];
+  const anims = [];
+  let timeline = 0;
+  let longestLineWidth = 0;
+  const measureSvg = document.createElementNS("http://www.w3.org/2000/svg","svg");
+  measureSvg.setAttribute("xmlns","http://www.w3.org/2000/svg");
+  measureSvg.style.cssText = "position:fixed;left:-100000px;top:-100000px;visibility:hidden;overflow:visible";
+  document.body.appendChild(measureSvg);
+  try {
+    rows.forEach((row, lineIndex) => {
+      const inherited = {
+        fontFamily: rootStyle["font-family"], fontSize: rootStyle["font-size"],
+        fontWeight: rootStyle["font-weight"], fontStyle:"normal",
+        textDecoration:"none", letterSpacing:rootStyle["letter-spacing"],
+        wordSpacing:rootStyle["word-spacing"], fill:rootStyle.fill, stroke:"none", strokeWidth:"0"
+      };
+      const {markup, units} = svgTextNodes(row, unitMode, inherited);
+      const y = (lineIndex + 1) * (fontSize * 1.65);
+      const text = document.createElementNS("http://www.w3.org/2000/svg","text");
+      text.setAttribute("x","0"); text.setAttribute("y",String(y));
+      text.setAttribute("text-anchor",rootStyle["text-anchor"]);
+      text.setAttribute("font-family",rootStyle["font-family"]);
+      text.setAttribute("font-size",rootStyle["font-size"]);
+      text.setAttribute("font-weight",rootStyle["font-weight"]);
+      text.setAttribute("fill",rootStyle.fill);
+      text.innerHTML = markup;
+      measureSvg.appendChild(text);
+      const box = text.getBBox();
+      longestLineWidth = Math.max(longestLineWidth, box.width);
+      const unitCount = unitMode === "line" ? 1 : Math.max(1, units.length);
+      const lineStart = timeline;
+      const enterStart = lineStart;
+      const exitStart = mode === "type" ? -1 : lineStart + (Math.max(0,unitCount-1)*delay) + duration + deletePause;
+      const targets = unitMode === "line" ? [text] : Array.from(text.querySelectorAll("tspan.svg-unit"));
+      targets.forEach((target, unitIndex) => {
+        const id = `txv-${lineIndex}-${unitIndex}`;
+        target.setAttribute("id",id);
+        const unitStart = enterStart + (unitMode === "line" ? 0 : unitIndex*delay);
+        let animationMarkup = "";
+        if (mode !== "delete" && entrance !== "none") {
+          animationMarkup += svgAnimationMarkup(id, entrance, unitStart, duration, false, mode === "loop" ? "indefinite" : "1");
+        }
+        if (mode !== "type" && exit !== "none") {
+          const outStart = exitStart + (unitMode === "line" ? 0 : unitIndex*delay);
+          animationMarkup += svgAnimationMarkup(id, exit, outStart, duration, true, mode === "loop" ? "indefinite" : "1");
+        }
+        if (animationMarkup) target.insertAdjacentHTML("beforeend", animationMarkup);
+      });
+      textBlocks.push(text.outerHTML);
+      const enterSpan = Math.max(0,unitCount-1)*delay + duration;
+      timeline += (mode === "type" ? enterSpan : enterSpan + deletePause + Math.max(0,unitCount-1)*delay + duration) + linePause;
+    });
+    const bbox = rows.length * fontSize * 1.65;
+    const width = Math.max(240, Math.ceil(longestLineWidth + fontSize*3), 600);
+    const height = Math.max(160, Math.ceil(bbox + fontSize*2));
+    const xOffset = width/2;
+    const background = $("transparentBg").checked ? "" :
+      `<rect x="0" y="0" width="${width}" height="${height}" fill="${svgEscape($("canvasBg").value || "#20202b")}"/>`;
+    const shadowValue = $("shadow").value || "none";
+    const shadowFilter = shadowValue !== "none"
+      ? `<filter id="textivo-shadow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur"/><feOffset in="blur" dx="0" dy="3" result="offset"/><feFlood flood-color="${svgEscape(shadowValue.includes("#") ? shadowValue.slice(shadowValue.lastIndexOf("#")) : "#000000")}" flood-opacity=".65" result="color"/><feComposite in="color" in2="offset" operator="in" result="shadow"/><feMerge><feMergeNode in="shadow"/><feMergeNode in="SourceGraphic"/></feMerge></filter>` : "";
+    const defs = `<defs>${shadowFilter}<style><![CDATA[
+      text{dominant-baseline:auto}
+      .svg-unit{white-space:pre}
+    ]]></style></defs>`;
+    const shift = `translate(${xOffset} ${fontSize})`;
+    const repeat = mode === "loop" ? "indefinite" : "1";
+    const animations = anims.filter(Boolean).join("");
+    const svg = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" version="1.1">
+${defs}
+${background}
+<g transform="${shift}">
+${textBlocks.join("\n")}
+</g>
+<g aria-hidden="true">${animations.replace(/repeatCount="1"/g,`repeatCount="${repeat}"`)}</g>
+</svg>`;
+    return svg;
+  } finally {
+    measureSvg.remove();
+  }
+}
+function exportTextivoSVG() {
+  try {
+    const svg = buildTextivoAnimatedSVG();
+    download("textivo-animated.svg", svg, "image/svg+xml;charset=utf-8");
+  } catch (error) {
+    console.error("Textivo SVG export failed:", error);
+    alert("SVG export failed: " + (error?.message || String(error)));
+  }
+}
+
+$("svgBtn").addEventListener("click", exportTextivoSVG); $("pngBtn").addEventListener("click",()=>{
  const canvas=document.createElement("canvas"),ctx=canvas.getContext("2d");canvas.width=1600;canvas.height=900;
  if(!hasTransparentBackground()){ctx.fillStyle=$("canvasBg").value;ctx.fillRect(0,0,canvas.width,canvas.height);}
  ctx.fillStyle=$("defaultColor").value;ctx.textAlign=$("align").value==="left"?"left":$("align").value==="right"?"right":"center";
