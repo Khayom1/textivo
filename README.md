@@ -1,3 +1,9 @@
+<div align="center">
+  <img src="assets/textivo-logo.svg"
+       width="100%"
+       alt="Textivo — Typography Studio"/>
+</div>
+
 # 🧪 Export & Import Testing — Start Here
 
 **Help verify that Textivo exports and restores complete editable projects without losing formatting or animation settings.**
