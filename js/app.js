@@ -488,7 +488,7 @@ function buildTextivoAnimatedSVG() {
     const background = $("transparentBg").checked ? "" :
       `<rect x="0" y="0" width="${width}" height="${height}" fill="${svgEscape($("canvasBg").value || "#20202b")}"/>`;
     const shadowValue = $("shadow").value || "none";
-    const     const shadowNumbers = [...shadowValue.matchAll(/(-?\d+(?:\.\d+)?)(?:px)?/g)].slice(0,3).map(match=>Number(match[1]));
+    const shadowNumbers = [...shadowValue.matchAll(/(-?\d+(?:\.\d+)?)(?:px)?/g)].slice(0,3).map(match=>Number(match[1]));
     const shadowColor = shadowValue.match(/#[0-9a-f]{3,8}/i)?.[0] || "#000000";
     const shadowFilter = shadowValue !== "none"
       ? `<filter id="textivo-shadow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceAlpha" stdDeviation="${Math.max(0,(shadowNumbers[2]||0)/2)}" result="blur"/><feOffset in="blur" dx="${shadowNumbers[0]||0}" dy="${shadowNumbers[1]||0}" result="offset"/><feFlood flood-color="${svgEscape(shadowColor)}" flood-opacity=".75" result="color"/><feComposite in="color" in2="offset" operator="in" result="shadow"/><feMerge><feMergeNode in="shadow"/><feMergeNode in="SourceGraphic"/></feMerge></filter>` : "";
