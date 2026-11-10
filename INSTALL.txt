@@ -1,0 +1,9 @@
+TEXTIVO MOTION FIX v11
+
+1. Extract the ZIP into ~/textivo.
+2. In Termux run:
+   cd ~/textivo
+   python apply_textivo_motion_fix_v11.py
+3. Reload Textivo. Fully close and reopen the PWA if installed.
+
+The patch creates js/app.js.v10-backup before changing app.js.
