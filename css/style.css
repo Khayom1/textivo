@@ -30,3 +30,7 @@
 
 /* v9 motion controls */
 .motion-settings{margin-top:16px;padding:14px;border:1px solid #343044;border-radius:12px;background:#191722}.motion-intro{font-size:12px;line-height:1.55;color:#bdb7cc;margin-bottom:8px}.motion-settings select{min-height:42px}.motion-settings input[type=range]{margin-top:5px}.animation-screen .motion-line{width:100%;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.35}.animation-screen span{vertical-align:baseline}
+
+/* v13: quick templates and canvas presets */
+.template-tools{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:end;margin:12px 0}.template-tools label{margin-top:0}.template-tools button{min-height:42px;white-space:nowrap}.template-tools select{min-width:0}@media(max-width:420px){.template-tools{grid-template-columns:1fr}.template-tools button{width:100%}}
+#preview{aspect-ratio:16/9;max-height:520px;transition:aspect-ratio .2s ease}
