@@ -8,11 +8,11 @@
 
 **A free, multilingual typography and motion-design studio that runs in your browser — no account, no paid API, no complicated software.**
 
-[![Open Live Studio](https://img.shields.io/badge/OPEN-LIVE%20STUDIO-a78bfa?style=for-the-badge)](https://khayom1.github.io/textivo/)
+[![Open Live Studio](https://img.shields.io/badge/OPEN-REPOSITORY-a78bfa?style=for-the-badge)](https://github.com/Khayom1/textivo)
 [![Languages](https://img.shields.io/badge/LANGUAGES-EN%20%7C%20RU%20%7C%20TG-20202b?style=for-the-badge)](#-languages)
 [![Offline](https://img.shields.io/badge-OFFLINE--READY-20202b?style=for-the-badge)](#-privacy--offline-first)
 
-**[Try Textivo](https://khayom1.github.io/textivo/) · [Report a bug](https://github.com/Khayom1/textivo/issues) · [Request a feature](https://github.com/Khayom1/textivo/issues)**
+**[Open repository](https://github.com/Khayom1/textivo) · [Report a bug](https://github.com/Khayom1/textivo/issues) · [Request a feature](https://github.com/Khayom1/textivo/issues)**
 
 </div>
 
@@ -57,7 +57,7 @@ It is built for people who want polished text graphics without needing Photoshop
 
 ### Use Textivo online
 
-Open **[Textivo Live](https://khayom1.github.io/textivo/)** in a modern browser. On supported browsers, use the browser menu to install it as an app.
+A hosted demo is not configured yet. Follow the local setup below to run Textivo in your browser; the app can then be installed where the browser supports PWA installation.
 
 ### Run locally
 
@@ -162,7 +162,7 @@ No framework or backend is required for the core editor.
 
 ## ✦ Run the quality checks
 
-Maintainers with Node.js 20 or newer can run the repository checks locally:
+Maintainers with Node.js 20 or newer can run the repository checks locally (GitHub Actions is not required):
 
 ```bash
 node --check js/app.js
