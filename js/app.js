@@ -181,7 +181,7 @@ $("applyTemplate").addEventListener("click",()=>{
 });
 function hasTransparentBackground(){return $("transparentBg").checked}
 function updatePreview(){
- $("previewText").innerHTML=editor.innerHTML;
+ $("previewText").innerHTML=sanitizeEditorHTML(editor.innerHTML);
  [...$("previewText").children].forEach(row=>row.removeAttribute("contenteditable"));
  $("preview").style.background=hasTransparentBackground()?"transparent":$("canvasBg").value;
  const ratio=($("canvasPreset")?.value||"16:9").split(":").map(Number);
@@ -197,6 +197,20 @@ function captureSelection(){
 }
 document.addEventListener("selectionchange",captureSelection);
 editor.addEventListener("input",()=>{remember();updatePreview()});
+editor.addEventListener("paste",event=>{
+ event.preventDefault();
+ const text=(event.clipboardData||window.clipboardData)?.getData("text/plain")||"";
+ if(!text)return;
+ const selection=window.getSelection();
+ if(selection&&selection.rangeCount&&editor.contains(selection.anchorNode)){
+  const range=selection.getRangeAt(0);range.deleteContents();
+  const node=document.createTextNode(text);range.insertNode(node);
+  range.setStartAfter(node);range.collapse(true);selection.removeAllRanges();selection.addRange(range);
+  savedRange=range.cloneRange();
+  editor.dispatchEvent(new Event("input",{bubbles:true}));
+ }else document.execCommand("insertText",false,text);
+});
+
 
 function restoreSelection(){
  if(!savedRange)return false;
@@ -436,7 +450,7 @@ function buildTextivoAnimatedSVG() {
       const unitCount = unitMode === "line" ? 1 : Math.max(1, units.length);
       const lineStart = timeline;
       const enterStart = lineStart;
-      const exitStart = mode === "type" ? -1 : lineStart + (Math.max(0,unitCount-1)*delay) + duration + deletePause;
+      const exitStart = mode === "type" ? -1 : mode === "delete" ? lineStart : lineStart + (Math.max(0,unitCount-1)*delay) + duration + deletePause;
       const targets = unitMode === "line" ? [text] : Array.from(text.querySelectorAll("tspan.svg-unit"));
       targets.forEach((target, unitIndex) => {
         const id = `txv-${lineIndex}-${unitIndex}`;
@@ -540,7 +554,10 @@ $("svgBtn").addEventListener("click", exportTextivoSVG); $("pngBtn").addEventLis
     ctx.fillStyle=st.backgroundColor;ctx.fillRect(x,y-px*.62,width,px*1.25);
    }
    ctx.fillStyle=st.color||$("defaultColor").value;
-   ctx.shadowColor="transparent";ctx.shadowBlur=0;
+   const shadow=st.textShadow||"none";
+   const shadowColor=shadow.match(/rgba?\([^)]+\)|#[0-9a-f]{3,8}|\b[a-z]+\b/i)?.[0]||"transparent";
+   const shadowNumbers=[...shadow.matchAll(/(-?\d+(?:\.\d+)?)px/g)].map(match=>Number(match[1]));
+   ctx.shadowColor=shadowColor;ctx.shadowOffsetX=(shadowNumbers[0]||0)*scale*fit;ctx.shadowOffsetY=(shadowNumbers[1]||0)*scale*fit;ctx.shadowBlur=(shadowNumbers[2]||0)*scale*fit;
    if(run.letter){
     let cx=x;for(const ch of run.text){ctx.fillText(ch,cx,y);cx+=ctx.measureText(ch).width+run.letter*scale*fit}
    }else ctx.fillText(run.text,x,y);
@@ -549,6 +566,7 @@ $("svgBtn").addEventListener("click", exportTextivoSVG); $("pngBtn").addEventLis
     ctx.fillStyle=st.color||$("defaultColor").value;ctx.fillRect(x,y+(decoration.includes("underline")?px*.42:0),width,Math.max(1,px*.055));
     if(decoration.includes("line-through"))ctx.fillRect(x,y, width,Math.max(1,px*.055));
    }
+   ctx.shadowColor="transparent";ctx.shadowBlur=0;ctx.shadowOffsetX=0;ctx.shadowOffsetY=0;
    x+=width;
   });
  });
@@ -568,7 +586,7 @@ function splitIntoUnits(line,kind){if(kind==="line"){const b=document.createElem
 function inFrames(e){return ({fade:[{opacity:0},{opacity:1}],rise:[{opacity:0,transform:"translateY(28px)"},{opacity:1,transform:"translateY(0)"}],"slide-left":[{opacity:0,transform:"translateX(-35px)"},{opacity:1,transform:"translateX(0)"}],zoom:[{opacity:0,transform:"scale(.55)"},{opacity:1,transform:"scale(1)"}],blur:[{opacity:0,filter:"blur(10px)"},{opacity:1,filter:"blur(0)"}],pop:[{opacity:0,transform:"scale(.65)"},{opacity:1,transform:"scale(1.12)",offset:.72},{opacity:1,transform:"scale(1)"}]})[e]||[{opacity:1},{opacity:1}]}
 function outFrames(e){return ({fade:[{opacity:1},{opacity:0}],drop:[{opacity:1,transform:"translateY(0)"},{opacity:0,transform:"translateY(28px)"}],"slide-right":[{opacity:1,transform:"translateX(0)"},{opacity:0,transform:"translateX(35px)"}],zoom:[{opacity:1,transform:"scale(1)"},{opacity:0,transform:"scale(.55)"}],blur:[{opacity:1,filter:"blur(0)"},{opacity:0,filter:"blur(10px)"}]})[e]||[{opacity:1},{opacity:1}]}
 function animateElement(el,frames,duration){if(!duration)return Promise.resolve();if(el.animate)return el.animate(frames,{duration,easing:"cubic-bezier(.2,.75,.25,1)",fill:"both"}).finished.catch(()=>{});return sleep(duration)}
-function setAnimationBaseStyle(){animationScreen.style.fontFamily=$("font").value;animationScreen.style.fontSize=(Number($("size").value)||32)+"px";animationScreen.style.fontWeight=$("weight").value;animationScreen.style.color=$("color").value;animationScreen.style.textAlign=$("align").value;animationScreen.style.textShadow=$("shadow").value;animationScreen.style.background=hasTransparentBackground()?"transparent":$("canvasBg").value}
+function setAnimationBaseStyle(){animationScreen.style.fontFamily=$("font").value;animationScreen.style.fontSize=(Number($("size").value)||32)+"px";animationScreen.style.fontWeight=$("weight").value;animationScreen.style.color=$("defaultColor").value;animationScreen.style.textAlign=$("align").value;animationScreen.style.textShadow=$("shadow").value;animationScreen.style.background=hasTransparentBackground()?"transparent":$("canvasBg").value}
 $("stopBtn").addEventListener("click",()=>{animationToken++;$("animationStatus").textContent=t("ready")});
 /* TEXTIVO_MOTION_FIX_V11 */
 $("playBtn").addEventListener("click", async () => {
