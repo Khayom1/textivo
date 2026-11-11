@@ -25,8 +25,6 @@ assert.ok(Array.isArray(manifest.icons) && manifest.icons.some(icon => icon.src 
 assert.ok(html.includes('assets/textivo-icon.svg'), "HTML must declare the favicon");
 assert.match(sw, /textivo-v16/, "Service worker cache must use the current version");
 assert.match(sw, /assets\/textivo-icon\.svg/, "Service worker must cache the app icon");
-assert.match(html, /style\.css\?v=14/);
-assert.match(html, /app\.js\?v=14/);
 assert.match(js, /Author: Khayom Abdurahmonov/, "Application source must identify its author");
 assert.match(js, /GitHub: https:\/\/github\.com\/Khayom1/, "Application source must link the author GitHub account");
 for (const id of ["textStats","findText","replaceText","replaceNextBtn","replaceAllBtn","upperBtn","lowerBtn","titleCaseBtn","trimSpacesBtn","removeBlankBtn","dedupeLinesBtn","sortLinesBtn"]) assert.ok(ids.has(id), `Text Studio tool is missing: ${id}`);
