@@ -121,6 +121,8 @@ Textivo is an independent project under active development. The editor and expor
 
 A hosted public demo is not currently configured. Run the project locally using the commands above.
 
+**License:** this repository currently has no license file. Do not assume permission to redistribute or reuse the source code until a license is added.
+
 ## Technology
 
 HTML5 · CSS3 · Vanilla JavaScript · DOM Selection APIs · Web Animations API · Canvas · SVG · Web App Manifest · Service Worker · Local Storage.
