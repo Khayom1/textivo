@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="850" viewBox="0 0 1200 850" role="img" aria-labelledby="title desc">
+<title id="title">Textivo — interactive typography studio showcase</title>
+<desc id="desc">An animated product illustration showing text editing, character styling, canvas presets, motion effects, live preview, and export formats.</desc>
+<defs>
+ <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#11111b"/><stop offset="1" stop-color="#08080e"/></linearGradient>
+ <linearGradient id="violet" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#c4a5ff"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient>
+ <linearGradient id="cyan" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#6ee7f9"/><stop offset="1" stop-color="#a78bfa"/></linearGradient>
+ <filter id="glow"><feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+ <filter id="shadow"><feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000" flood-opacity=".35"/></filter>
+ <style>
+ .ui{font-family:Inter,Arial,sans-serif;fill:#f7f5ff}.muted{fill:#9995aa;font-family:Inter,Arial,sans-serif}.tiny{font-size:11px;letter-spacing:1.2px;font-weight:700}.small{font-size:13px}.label{font-size:15px;font-weight:700}.card{fill:#171722;stroke:#302d40;stroke-width:1.3}.field{fill:#222231;stroke:#3b384b;stroke-width:1}.chip{fill:#242234;stroke:#51456d;stroke-width:1}.accent{fill:#b99aff}.line{stroke:#39364a;stroke-width:1}
+ </style>
+</defs>
+<rect width="1200" height="850" rx="28" fill="url(#bg)"/>
+<circle cx="1060" cy="95" r="170" fill="#8b5cf6" opacity=".08"/>
+<circle cx="100" cy="770" r="180" fill="#22d3ee" opacity=".035"/>
+<!-- header -->
+<text x="48" y="55" class="ui" font-size="29" font-weight="900" letter-spacing="-1">textivo<tspan fill="#a78bfa">.</tspan></text>
+<text x="1150" y="50" text-anchor="end" class="muted tiny">TEXT-ONLY CREATIVE STUDIO · V16</text>
+<text x="48" y="108" class="ui" font-size="38" font-weight="800" letter-spacing="-1.5">Your text. <tspan fill="#b99aff">Your rules.</tspan></text>
+<text x="49" y="136" class="muted" font-size="15">Write it · Style every detail · Bring it to life · Export anywhere</text>
+<!-- left editor card -->
+<rect x="42" y="170" width="520" height="420" rx="18" class="card" filter="url(#shadow)"/>
+<text x="68" y="207" class="ui label">01 / TEXT WORKSPACE</text>
+<text x="536" y="207" text-anchor="end" class="accent tiny">WRITE + EDIT</text>
+<rect x="68" y="228" width="468" height="74" rx="11" class="field"/>
+<text x="88" y="273" class="ui" font-size="23">Create something amazing.</text>
+<rect x="68" y="315" width="468" height="36" rx="8" fill="#211b2e" stroke="#6d55a1" stroke-dasharray="4 4"/>
+<text x="302" y="338" text-anchor="middle" class="accent small" font-weight="700">＋  Add another line</text>
+<text x="68" y="383" class="ui label">02 / CHARACTER-LEVEL STYLING</text>
+<rect x="68" y="400" width="42" height="34" rx="7" class="chip"/><text x="89" y="423" text-anchor="middle" class="ui label">B</text>
+<rect x="117" y="400" width="42" height="34" rx="7" class="chip"/><text x="138" y="423" text-anchor="middle" class="ui label" font-style="italic">I</text>
+<rect x="166" y="400" width="42" height="34" rx="7" class="chip"/><text x="187" y="423" text-anchor="middle" class="ui label" text-decoration="underline">U</text>
+<rect x="224" y="400" width="145" height="34" rx="7" class="field"/><text x="238" y="422" class="muted small">Font · Size · Weight</text>
+<rect x="380" y="400" width="70" height="34" rx="7" fill="#fff"/><rect x="459" y="400" width="77" height="34" rx="7" fill="#a78bfa"/>
+<text x="68" y="462" class="muted small">Letter spacing</text><rect x="68" y="473" width="215" height="8" rx="4" fill="#343143"/><rect x="68" y="473" width="93" height="8" rx="4" fill="url(#violet)"/><circle cx="161" cy="477" r="7" fill="#d9c8ff"/>
+<text x="307" y="462" class="muted small">Word spacing</text><rect x="307" y="473" width="229" height="8" rx="4" fill="#343143"/><rect x="307" y="473" width="130" height="8" rx="4" fill="url(#violet)"/><circle cx="437" cy="477" r="7" fill="#d9c8ff"/>
+<rect x="68" y="507" width="145" height="48" rx="9" fill="url(#violet)"/><text x="140" y="537" text-anchor="middle" fill="#171020" font-family="Arial" font-size="13" font-weight="800">Apply styling</text>
+<rect x="223" y="507" width="145" height="48" rx="9" class="field"/><text x="295" y="537" text-anchor="middle" class="ui small">Clear style</text>
+<rect x="378" y="507" width="158" height="48" rx="9" class="field"/><text x="457" y="537" text-anchor="middle" class="ui small">Select all</text>
+<text x="68" y="574" class="muted" font-size="11">Bold · Italic · Underline · Strike · Font · Color · Highlight · Alignment</text>
+<!-- right preview -->
+<rect x="584" y="170" width="574" height="255" rx="18" class="card" filter="url(#shadow)"/>
+<text x="610" y="207" class="ui label">03 / LIVE DESIGN PREVIEW</text>
+<text x="1132" y="207" text-anchor="end" class="accent tiny">INSTANT FEEDBACK</text>
+<rect x="610" y="226" width="522" height="172" rx="12" fill="#20202d"/>
+<text x="871" y="300" text-anchor="middle" font-family="Arial,sans-serif" font-size="32" font-weight="800" fill="#f7f4ff" filter="url(#glow)">
+ <tspan opacity="0">MAKE</tspan><tspan opacity="1"> MAKE</tspan>
+ <animate attributeName="opacity" values=".55;1;.55" dur="3s" repeatCount="indefinite"/>
+</text>
+<text x="871" y="344" text-anchor="middle" font-family="Arial,sans-serif" font-size="31" font-weight="900" fill="#b99aff">WORDS MOVE
+ <animate attributeName="opacity" values=".2;1;.2" dur="2.8s" begin=".4s" repeatCount="indefinite"/>
+ <animateTransform attributeName="transform" type="translate" values="0 10;0 0;0 -2;0 0" dur="2.8s" begin=".4s" repeatCount="indefinite"/>
+</text>
+<!-- motion card -->
+<rect x="584" y="445" width="574" height="145" rx="18" class="card"/>
+<text x="610" y="481" class="ui label">04 / MOTION STUDIO</text>
+<text x="1132" y="481" text-anchor="end" class="accent tiny">LINE · WORD · CHARACTER</text>
+<g>
+ <rect x="610" y="500" width="150" height="34" rx="8" class="chip"/><text x="685" y="522" text-anchor="middle" class="ui small">Fade / Rise / Pop</text>
+ <rect x="770" y="500" width="150" height="34" rx="8" class="chip"/><text x="845" y="522" text-anchor="middle" class="ui small">Blur / Zoom / Slide</text>
+ <rect x="930" y="500" width="202" height="34" rx="8" class="chip"/><text x="1031" y="522" text-anchor="middle" class="ui small">Entrance + Exit + Timing</text>
+</g>
+<path d="M615 559 H1128" stroke="#39364a" stroke-width="5" stroke-linecap="round"/>
+<path d="M615 559 H960" stroke="url(#cyan)" stroke-width="5" stroke-linecap="round">
+ <animate attributeName="stroke-dasharray" values="0 513;170 343;350 163;513 0;0 513" dur="4s" repeatCount="indefinite"/>
+</path>
+<circle cx="960" cy="559" r="8" fill="#c7aaff"><animate attributeName="cx" values="615;1128;615" dur="4s" repeatCount="indefinite"/></circle>
+<text x="610" y="579" class="muted" font-size="10">Duration · Delay · Pause · Play once · Loop · Typing · Deleting</text>
+<!-- bottom capability cards -->
+<rect x="42" y="612" width="350" height="154" rx="16" class="card"/>
+<text x="66" y="648" class="ui label">05 / CANVAS + TEMPLATES</text>
+<rect x="66" y="668" width="74" height="52" rx="6" fill="#242334" stroke="#8e73d5"/><text x="103" y="698" text-anchor="middle" class="accent tiny">16:9</text>
+<rect x="151" y="668" width="52" height="52" rx="6" fill="#242334" stroke="#8e73d5"/><text x="177" y="698" text-anchor="middle" class="accent tiny">1:1</text>
+<rect x="214" y="660" width="32" height="68" rx="5" fill="#242334" stroke="#8e73d5"/><text x="230" y="698" text-anchor="middle" class="accent" font-size="8">9:16</text>
+<text x="265" y="687" class="muted small">4:5 portrait</text><text x="265" y="708" class="muted small">Background + shadow</text>
+<text x="66" y="745" class="muted" font-size="11">Quote · Announcement · Study · Creator · Minimal</text>
+<rect x="410" y="612" width="350" height="154" rx="16" class="card"/>
+<text x="434" y="648" class="ui label">06 / TEXT TOOLS</text>
+<g class="small ui">
+ <text x="434" y="682">Find + replace</text><text x="434" y="709">UPPER / lower / Title Case</text>
+ <text x="434" y="736">Clean spaces · Remove duplicates · Sort lines</text>
+</g>
+<rect x="778" y="612" width="380" height="154" rx="16" class="card"/>
+<text x="802" y="648" class="ui label">07 / SAVE + EXPORT</text>
+<g font-family="Arial" font-size="12" font-weight="700">
+ <rect x="802" y="666" width="88" height="31" rx="7" class="chip"/><text x="846" y="686" text-anchor="middle" class="ui">HTML</text>
+ <rect x="899" y="666" width="78" height="31" rx="7" class="chip"/><text x="938" y="686" text-anchor="middle" class="ui">SVG</text>
+ <rect x="986" y="666" width="78" height="31" rx="7" class="chip"/><text x="1025" y="686" text-anchor="middle" class="ui">PNG</text>
+ <rect x="1073" y="666" width="61" height="31" rx="7" class="chip"/><text x="1103" y="686" text-anchor="middle" class="ui">JSON</text>
+</g>
+<text x="802" y="723" class="muted small">Animated HTML · Project import / export</text>
+<text x="802" y="744" class="muted small">Local save · Copy text · Offline-ready</text>
+<text x="600" y="815" text-anchor="middle" class="muted" font-size="12">TEXTIVO · A focused studio for expressive typography · No account · No paid API</text>
+</svg>
