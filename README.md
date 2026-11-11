@@ -6,6 +6,8 @@
 
 ### Your words. Your style. Your motion.
 
+**Current release: v16**
+
 **A text-only creative studio for writing, styling, animating, and exporting typography.**
 
 No account. No paid API. No photo editor. No complicated design software.
