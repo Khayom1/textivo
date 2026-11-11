@@ -40,7 +40,7 @@ button:focus-visible,select:focus-visible,input:focus-visible,.text-line:focus-v
 button:disabled{opacity:.55;cursor:not-allowed;transform:none}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation-duration:.01ms!important;animation-iteration-count:1!important}}
 
-/* v15 — text-first studio tools */
+/* v16 — animation whitespace handling and synchronized release */
 .text-tools{margin:16px 0;background:linear-gradient(145deg,#151320,#13131c)}
 .text-stats{margin:10px 0 16px;padding:12px 13px;border:1px solid #373047;border-radius:10px;background:#191522;color:#d6c8ff;font-size:12px;font-weight:700;line-height:1.5;font-variant-numeric:tabular-nums}
 .tool-subtitle{margin:18px 0 6px;color:#d8c9ff;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
