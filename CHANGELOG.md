@@ -5,7 +5,7 @@
 ### Fixed
 - Corrected the automated repository check that still expected v14 asset URLs while the application and service worker were on v15.
 - Synchronized HTML asset query strings, the application build identifier, the service-worker cache name, and precache URLs to v16.
-- Fixed word-unit grouping in Motion Studio and standalone Animated HTML export so leading whitespace stays with the first word instead of becoming a separate animation unit.
+- Fixed word-unit grouping in Motion Studio and standalone Animated HTML export: whitespace now separates word units while remaining attached to the adjacent word, including leading and trailing spaces.
 - Preserved text content and inline formatting while splitting words for animation.
 
 ### Validation
