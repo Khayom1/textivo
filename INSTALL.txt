@@ -1,37 +1,44 @@
-TEXTIVO — INSTALLATION GUIDE v13
+TEXTIVO — TEXT STUDIO
+INSTALLATION & QUICK START · BUILD 15
 
-REQUIREMENTS
+WHAT YOU NEED
 - Python 3
-- A modern browser (Chrome, Firefox, Edge, or Safari)
+- A modern browser: Chrome, Firefox, Edge, or Safari
 
 RUN ON ANDROID WITH TERMUX
-
-1. Open the project folder:
-   cd ~/textivo
-
-2. Start the local web server:
+1. Open Termux.
+2. Install the required tools:
+   pkg update
+   pkg install git python
+3. Download Textivo:
+   git clone https://github.com/Khayom1/textivo.git
+4. Enter the folder:
+   cd textivo
+5. Start the local web server:
    python -m http.server 8080 --bind 127.0.0.1
-
-3. Open in your browser:
+6. Open this address in your browser:
    http://127.0.0.1:8080
 
-Keep Termux running while using the local server.
-Press CTRL+C to stop the server.
+Keep Termux running while you use Textivo. Press CTRL+C in Termux to stop the server.
 
-QUICK START
-- Choose one of the built-in design templates.
-- Edit the text and style selected words or characters.
-- Select a canvas format: 16:9, 1:1, 9:16, or 4:5.
-- Preview the composition and configure Motion Studio.
-- Use Save project for local browser storage.
-- Export Project JSON to keep an editable backup.
-- Export HTML, SVG, or PNG to share your work.
+FIRST PROJECT
+- Write your text in the line boxes.
+- Use Text tools to count words, search, replace, change case, and clean lines.
+- Select a word or character to style it.
+- Choose a canvas format and background.
+- Preview your text and configure Motion Studio if needed.
+- Save the project locally and export a JSON backup.
+- Export HTML, SVG, or PNG when you are ready to share.
 
 OFFLINE USE
-Open the app once while online so the service worker can cache its core files.
+Open Textivo once while online so the service worker can cache its core files.
 After successful caching, the app can reopen offline in a supported browser.
-Browser storage may be cleared by the browser or operating system; keep JSON backups.
+Saved work stays in browser storage on this device. Browser cleanup, private browsing, or operating-system storage management can remove it. Export a Project JSON backup for important work.
+
+FULL MANUAL
+Read GUIDE.md for the full step-by-step user guide and feature explanations.
 
 AUTHOR
 Khayom Abdurahmonov
-https://github.com/Khayom1/textivo
+GitHub: https://github.com/Khayom1
+Repository: https://github.com/Khayom1/textivo
