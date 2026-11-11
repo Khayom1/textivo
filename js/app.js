@@ -126,6 +126,9 @@ Object.assign(dict.tg,{textToolsIntro:"Матнро тоза кун, калим�
 Object.assign(dict.en,{replaceNextBtn:"Replace first",replaceAllBtn:"Replace all",upperBtn:"UPPERCASE",lowerBtn:"lowercase",titleCaseBtn:"Title Case",trimSpacesBtn:"Normalize spaces",removeBlankBtn:"Remove empty lines",dedupeLinesBtn:"Remove duplicates",sortLinesBtn:"Sort A–Z"});
 Object.assign(dict.ru,{replaceNextBtn:"Заменить первое",replaceAllBtn:"Заменить всё",upperBtn:"ВЕРХНИЙ РЕГИСТР",lowerBtn:"нижний регистр",titleCaseBtn:"Каждое Слово",trimSpacesBtn:"Убрать лишние пробелы",removeBlankBtn:"Удалить пустые строки",dedupeLinesBtn:"Удалить повторы",sortLinesBtn:"Сортировать А–Я"});
 Object.assign(dict.tg,{replaceNextBtn:"Иваз кардани аввал",replaceAllBtn:"Ҳамаро иваз кун",upperBtn:"ҲАМА КАЛОН",lowerBtn:"ҳама хурд",titleCaseBtn:"Ҳар Калима Калон",trimSpacesBtn:"Фосилаҳоро тоза кун",removeBlankBtn:"Сатрҳои холиро пок кун",dedupeLinesBtn:"Такрорҳоро пок кун",sortLinesBtn:"Аз А то Я"});
+Object.assign(dict.en,{textToolsTitle:"Text tools",textToolsStatus:"Ready. Changes can be undone."});
+Object.assign(dict.ru,{textToolsTitle:"Инструменты текста",textToolsStatus:"Готово. Изменения можно отменить."});
+Object.assign(dict.tg,{textToolsTitle:"Асбобҳои матн",textToolsStatus:"Тайёр. Тағйиротро баргардондан мумкин аст."});
 function t(key){return (dict[$("language").value]||dict.en)[key]||dict.en[key]||key}
 function translate(lang){
  const d=dict[lang]||dict.en;
