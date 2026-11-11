@@ -52,6 +52,11 @@ Keep Termux open while testing. Stop the server with `Ctrl+C`.
 - [ ] Change canvas format between 16:9, 1:1, 9:16, and 4:5. The preview ratio must change immediately.
 - [ ] Change canvas background, default text color, font, size, weight, alignment, and shadow. Preview must update without editing the text.
 - [ ] Add multiple lines, edit them, split a line with Enter, and verify Undo / Redo.
+- [ ] Check live character, word, and line counts while editing.
+- [ ] Test Find and Replace first/all, including case-insensitive matches and empty replacement text.
+- [ ] Test uppercase, lowercase, and title case with English, Russian, and Tajik text.
+- [ ] Test space cleanup, empty-line removal, duplicate-line removal, and language-aware A–Z sorting.
+- [ ] Verify each Text tools button label and status message changes with the interface language.
 - [ ] Select one word, apply color/highlight/spacing, and verify only the selection changes.
 - [ ] Apply each template and verify the preview.
 - [ ] Export PNG in each canvas format. Confirm the downloaded image dimensions match the selected format.
