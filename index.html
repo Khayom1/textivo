@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#09090f"><meta name="description" content="Create, style, animate, and export beautiful typography in a free multilingual browser studio."><meta name="author" content="Khayom Abdurahmonov"><meta property="og:title" content="Textivo — Typography Studio"><meta property="og:description" content="Your words. Your style. Your motion. A free multilingual typography studio."><meta property="og:type" content="website"><title>Textivo — Typography Studio</title>
-<link rel="icon" href="assets/textivo-icon.svg" type="image/svg+xml"><link rel="manifest" href="manifest.json"><link rel="stylesheet" href="css/style.css?v=14">
+<meta name="theme-color" content="#09090f"><meta name="description" content="A text-only creative studio for typography, text cleanup, character styling, motion, and portable text compositions."><meta name="author" content="Khayom Abdurahmonov"><meta name="creator" content="Khayom Abdurahmonov — GitHub: Khayom1"><meta property="og:title" content="Textivo — Typography Studio"><meta property="og:description" content="Your words. Your style. Your motion. A free multilingual typography studio."><meta property="og:type" content="website"><title>Textivo — Typography Studio</title>
+<link rel="icon" href="assets/textivo-icon.svg" type="image/svg+xml"><link rel="manifest" href="manifest.json"><link rel="stylesheet" href="css/style.css?v=15">
 </head>
 <body>
 <header><a class="logo">textivo<span>.</span></a><select id="language" aria-label="Language"><option value="en">English</option><option value="ru">Русский</option><option value="tg">Тоҷикӣ</option></select><button id="saveBtn" class="primary">Save project</button></header>
@@ -15,7 +15,23 @@
 <div class="heading"><h2 id="workspaceTitle">Text workspace</h2><span class="tag" id="workspaceTag">STEP 1 · WRITE</span></div>
 <label id="writeLabel">Add your lines in order</label>
 <div class="template-tools"><div><label id="templatesLabel" for="templateSelect">Start with a template</label><select id="templateSelect"><option value="">Choose a template…</option><option value="quote">Quote card</option><option value="announcement">Announcement</option><option value="study">Study card</option><option value="creator">Creator title</option><option value="minimal">Minimal statement</option></select></div><button id="applyTemplate" type="button">Use template</button></div>
-<div id="editor" class="editor"><div class="text-line" contenteditable="true" spellcheck="false">Create something amazing.</div></div><button id="addLine" class="add-line" type="button">＋ Add line</button><p class="hint" id="lineHint">Each line is typed, erased, then the next line starts.</p>
+<div id="editor" class="editor"><div class="text-line" contenteditable="true" spellcheck="false">Create something amazing.</div></div><button id="addLine" class="add-line" type="button">＋ Add line</button><p class="hint" id="lineHint">Each box is one text line. Press Enter to add the next line.</p>
+<section class="panel text-tools" aria-labelledby="textToolsTitle">
+<div class="heading"><h2 id="textToolsTitle">Text tools</h2><span class="tag">QUICK EDIT</span></div>
+<p class="hint" id="textToolsIntro">Clean, find, replace, and organize words without leaving your studio.</p>
+<div class="text-stats" id="textStats" role="status" aria-live="polite">Characters: 0 · Words: 0 · Lines: 1</div>
+<div class="tool-subtitle" id="searchReplaceTitle">Find and replace</div>
+<div class="grid2">
+<div><label id="findLabel" for="findText">Find text</label><input id="findText" type="search" placeholder="Enter a word or phrase" autocomplete="off"></div>
+<div><label id="replaceLabel" for="replaceText">Replace with</label><input id="replaceText" type="text" placeholder="Replacement text" autocomplete="off"></div>
+</div>
+<div class="toolbar actionrow"><button id="replaceNextBtn" type="button">Replace first</button><button id="replaceAllBtn" type="button" class="primary">Replace all</button></div>
+<div class="tool-subtitle" id="caseToolsTitle">Change letter case</div>
+<div class="toolbar tool-grid"><button id="upperBtn" type="button">UPPERCASE</button><button id="lowerBtn" type="button">lowercase</button><button id="titleCaseBtn" type="button">Title Case</button></div>
+<div class="tool-subtitle" id="cleanupToolsTitle">Clean and organize lines</div>
+<div class="toolbar tool-grid"><button id="trimSpacesBtn" type="button">Normalize spaces</button><button id="removeBlankBtn" type="button">Remove empty lines</button><button id="dedupeLinesBtn" type="button">Remove duplicates</button><button id="sortLinesBtn" type="button">Sort A–Z</button></div>
+<p class="hint tool-status" id="textToolsStatus" role="status" aria-live="polite">Ready. Changes can be undone.</p>
+</section>
 <div class="how-to-select" role="note">
 <strong id="selectGuideTitle">Style any word or letter</strong>
 <ol>
@@ -68,6 +84,6 @@
 <div class="animation-screen" id="animationScreen">Textivo</div><p class="hint" id="animationStatus" aria-live="polite">Ready</p><div class="toolbar actionrow"><button id="playBtn" class="primary">▶ Play animation</button><button id="stopBtn">■ Stop</button></div></section>
 <section class="panel"><div class="heading"><h2 id="exportTitle">Export & projects</h2></div><div class="toolbar"><button id="copyBtn">Copy text</button><button id="htmlBtn">Export HTML</button><button id="svgBtn">Export SVG</button><button id="pngBtn">Export PNG</button></div><p class="hint" id="exportHint">Projects are saved locally on this device. No account required.</p></section>
 </div></div></main>
-<footer>TEXTIVO · <span id="authorLabel">Created by</span> <strong>Khayom Abdurahmonov</strong> · Independent project</footer>
-<script src="js/app.js?v=14" defer></script><script>if('serviceWorker' in navigator && location.protocol!=='file:') navigator.serviceWorker.register('./sw.js?v=14',{updateViaCache:'none'}).then(reg=>reg.update()).catch(()=>{});</script>
+<footer>TEXTIVO · <span id="authorLabel">Created by</span> <strong>Khayom Abdurahmonov</strong> · <a href="https://github.com/Khayom1" target="_blank" rel="noopener noreferrer">@Khayom1 on GitHub</a> · Independent project</footer>
+<script src="js/app.js?v=15" defer></script><script>if('serviceWorker' in navigator && location.protocol!=='file:') navigator.serviceWorker.register('./sw.js?v=15',{updateViaCache:'none'}).then(reg=>reg.update()).catch(()=>{});</script>
 </body></html>
