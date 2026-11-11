@@ -6,6 +6,8 @@ const js = readFileSync("js/app.js", "utf8");
 const css = readFileSync("css/style.css", "utf8");
 const manifest = JSON.parse(readFileSync("manifest.json", "utf8"));
 const sw = readFileSync("sw.js", "utf8");
+const guide = readFileSync("GUIDE.md", "utf8");
+const readme = readFileSync("README.md", "utf8");
 
 const idMatches = [...html.matchAll(/\bid=["']([^"']+)["']/g)];
 const ids = new Set(idMatches.map(match => match[1]));
@@ -31,6 +33,12 @@ assert.match(js, /GitHub: https:\/\/github\.com\/Khayom1/, "Application source m
 for (const id of ["textStats","findText","replaceText","replaceNextBtn","replaceAllBtn","upperBtn","lowerBtn","titleCaseBtn","trimSpacesBtn","removeBlankBtn","dedupeLinesBtn","sortLinesBtn"]) assert.ok(ids.has(id), `Text Studio tool is missing: ${id}`);
 assert.match(js, /function updateTextStats/, "Live text statistics must be available");
 assert.match(js, /function replaceText/, "Find and replace tools must be available");
+assert.match(js, /Object.assign\\(dict\\.ru/, "Russian UI translations must be available");
+assert.match(js, /Object.assign\\(dict\\.tg/, "Tajik UI translations must be available");
+assert.match(guide, /Complete User Guide/);
+assert.match(guide, /GitHub @Khayom1/);
+assert.match(readme, /GUIDE\\.md/);
+assert.ok(guide.length > 10000, "The complete user guide must contain meaningful documentation");
 assert.match(js, /function sanitizeEditorHTML/, "Project import must sanitize rich HTML");
 assert.match(js, /lastRememberedHTML/, "Undo history must track the previous editor state");
 assert.match(js, /textBlocks\.map\(text=>text\.outerHTML\)/, "SVG export must serialize positioned text nodes");
@@ -48,6 +56,7 @@ assert.equal(cacheVersion, appVersion, "Service worker cache version must match 
 assert.equal(scriptVersion, appVersion, "HTML app script version must match app build");
 assert.equal(styleVersion, appVersion, "HTML stylesheet version must match app build");
 assert.ok(existsSync("assets/textivo-icon.svg"), "PWA icon file must exist");
+assert.ok(existsSync("GUIDE.md"), "Complete user guide must exist");
 
 const precache = sw.match(/const FILES=\[(.*?)\];/s)?.[1] || "";
 assert.ok(precache.includes(`style.css?v=${appVersion}`), "Offline cache must include the current stylesheet");
