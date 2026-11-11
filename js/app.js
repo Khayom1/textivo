@@ -1,16 +1,16 @@
-/*! Textivo Typography Studio | Author: Khayom Abdurahmonov | https://github.com/Khayom1/textivo */
+/*! Textivo Text Studio | Author: Khayom Abdurahmonov | GitHub: https://github.com/Khayom1 | https://github.com/Khayom1/textivo */
 (() => {
 "use strict";
 const $ = id => document.getElementById(id);
 const editor = $("editor");
 const animationScreen = $("animationScreen");
 let savedRange = null, undoStack = [], redoStack = [], animationToken = 0;
-window.TEXTIVO_BUILD = "v14";
+window.TEXTIVO_BUILD = "v15";
 
 const dict = {
 en: {
  workspaceTitle:"Text workspace",writeLabel:"Add your lines in order",addLine:"＋ Add line",transparentBgLabel:"No background (transparent)",
- lineHint:"Each line is typed, erased, then the next line starts.",
+ lineHint:"Each box is one text line. Press Enter to add the next line.",
  selectHint:"Select a word or letter, then apply styles only to that selection.",
  selectionTitle:"Selection styling",fontLabel:"Font family",sizeLabel:"Font size (px)",
  colorLabel:"Text color",highlightLabel:"Highlight color",spacingLabel:"Letter spacing (px)",
@@ -47,7 +47,7 @@ en: {
 },
 ru: {
  workspaceTitle:"Рабочая область",writeLabel:"Добавляйте строки по порядку",addLine:"＋ Добавить строку",transparentBgLabel:"Без фона (прозрачный)",
- lineHint:"Каждая строка печатается, полностью стирается, затем начинается следующая.",
+ lineHint:"Каждое поле — отдельная строка. Нажмите Enter, чтобы добавить следующую.",
  selectHint:"Выделите слово или букву, чтобы изменить только эту часть.",
  selectionTitle:"Форматирование выделения",fontLabel:"Шрифт",sizeLabel:"Размер шрифта (px)",
  colorLabel:"Цвет текста",highlightLabel:"Цвет выделения",spacingLabel:"Интервал между буквами (px)",
@@ -83,7 +83,7 @@ ru: {
 },
 tg: {
  workspaceTitle:"Муҳаррири матн",writeLabel:"Сатрҳоро бо тартиб илова кун",addLine:"＋ Иловаи сатр",transparentBgLabel:"Бе фон (шаффоф)",
- lineHint:"Ҳар сатр аввал навишта, пурра пок мешавад, баъд сатри навбатӣ оғоз меёбад.",
+ lineHint:"Ҳар қуттӣ як сатри матн аст. Барои иловаи сатри навбатӣ Enter-ро пахш кун.",
  selectHint:"Калима ё ҳарфро интихоб кун, то танҳо ҳамон қисм тағйир ёбад.",
  selectionTitle:"Танзими қисми интихобшуда",fontLabel:"Навъи шрифт",sizeLabel:"Андозаи шрифт (px)",
  colorLabel:"Ранги матн",highlightLabel:"Ранги заминаи матн",spacingLabel:"Фосилаи ҳарфҳо (px)",
@@ -120,6 +120,9 @@ tg: {
 Object.assign(dict.en,{templatesLabel:"Start with a template",applyTemplate:"Use template",templatePlaceholder:"Choose a template…",templateQuote:"Quote card",templateAnnouncement:"Announcement",templateStudy:"Study card",templateCreator:"Creator title",templateMinimal:"Minimal statement",canvasPresetLabel:"Canvas format"});
 Object.assign(dict.ru,{templatesLabel:"Начать с шаблона",applyTemplate:"Применить шаблон",templatePlaceholder:"Выберите шаблон…",templateQuote:"Карточка с цитатой",templateAnnouncement:"Объявление",templateStudy:"Учебная карточка",templateCreator:"Заголовок автора",templateMinimal:"Минимализм",canvasPresetLabel:"Формат холста"});
 Object.assign(dict.tg,{templatesLabel:"Оғоз аз қолаб",applyTemplate:"Истифодаи қолаб",templatePlaceholder:"Қолабро интихоб кун…",templateQuote:"Корти иқтибос",templateAnnouncement:"Эълон",templateStudy:"Корти омӯзишӣ",templateCreator:"Сарлавҳаи эҷодӣ",templateMinimal:"Тарҳи минималӣ",canvasPresetLabel:"Андозаи саҳна"});
+Object.assign(dict.en,{textToolsIntro:"Clean, find, replace, and organize words without leaving your studio.",searchReplaceTitle:"Find and replace",findLabel:"Find text",replaceLabel:"Replace with",findPlaceholder:"Enter a word or phrase",replacePlaceholder:"Replacement text",replaceNext:"Replace first",replaceAll:"Replace all",caseToolsTitle:"Change letter case",upperLabel:"UPPERCASE",lowerLabel:"lowercase",titleCaseLabel:"Title Case",cleanupToolsTitle:"Clean and organize lines",trimSpaces:"Normalize spaces",removeBlank:"Remove empty lines",dedupeLines:"Remove duplicates",sortLines:"Sort A–Z",readyTools:"Ready. Changes can be undone.",statsLabel:"Characters: {chars} · Words: {words} · Lines: {lines}",searchMissing:"Enter text to find.",notFound:"No match found.",replacedOne:"Replaced one match.",replacedMany:"Replaced {count} matches.",noChange:"No changes were needed.",changedText:"Text updated. Use Undo to reverse the change.",removedBlank:"Removed {count} empty lines.",removedDuplicates:"Removed {count} duplicate lines.",sortedLines:"Lines sorted A–Z.",spacesCleaned:"Extra spaces cleaned."});
+Object.assign(dict.ru,{textToolsIntro:"Очищайте текст, находите и заменяйте слова, упорядочивайте строки прямо в студии.",searchReplaceTitle:"Поиск и замена",findLabel:"Найти текст",replaceLabel:"Заменить на",findPlaceholder:"Введите слово или фразу",replacePlaceholder:"Новый текст",replaceNext:"Заменить первое",replaceAll:"Заменить всё",caseToolsTitle:"Регистр букв",upperLabel:"ВЕРХНИЙ РЕГИСТР",lowerLabel:"нижний регистр",titleCaseLabel:"Каждое Слово",cleanupToolsTitle:"Очистка и порядок строк",trimSpaces:"Убрать лишние пробелы",removeBlank:"Удалить пустые строки",dedupeLines:"Удалить повторы",sortLines:"Сортировать А–Я",readyTools:"Готово. Изменения можно отменить.",statsLabel:"Символов: {chars} · Слов: {words} · Строк: {lines}",searchMissing:"Введите текст для поиска.",notFound:"Совпадений не найдено.",replacedOne:"Одно совпадение заменено.",replacedMany:"Заменено совпадений: {count}.",noChange:"Изменения не требуются.",changedText:"Текст обновлён. Нажмите «Отменить», чтобы вернуть его.",removedBlank:"Удалено пустых строк: {count}.",removedDuplicates:"Удалено повторов: {count}.",sortedLines:"Строки отсортированы А–Я.",spacesCleaned:"Лишние пробелы удалены."});
+Object.assign(dict.tg,{textToolsIntro:"Матнро тоза кун, калима ёб ва иваз намо, сатрҳоро ба тартиб дарор.",searchReplaceTitle:"Ҷустуҷӯ ва ивазкунӣ",findLabel:"Матни ҷустуҷӯшаванда",replaceLabel:"Иваз кардан бо",findPlaceholder:"Калима ё ибораро навис",replacePlaceholder:"Матни нав",replaceNext:"Иваз кардани аввал",replaceAll:"Ҳамаро иваз кун",caseToolsTitle:"Тағйири ҳарфҳои калон ва хурд",upperLabel:"ҲАМА КАЛОН",lowerLabel:"ҳама хурд",titleCaseLabel:"Ҳар Калима Калон",cleanupToolsTitle:"Тозакунӣ ва тартиби сатрҳо",trimSpaces:"Фосилаҳои зиёдатиро тоза кун",removeBlank:"Сатрҳои холиро пок кун",dedupeLines:"Такрори сатрҳоро пок кун",sortLines:"Аз А то Я тартиб деҳ",readyTools:"Тайёр. Тағйиротро баргардондан мумкин аст.",statsLabel:"Аломатҳо: {chars} · Калимаҳо: {words} · Сатрҳо: {lines}",searchMissing:"Аввал матни ҷустуҷӯшавандаро навис.",notFound:"Ягон мувофиқат ёфт нашуд.",replacedOne:"Як мувофиқат иваз шуд.",replacedMany:"Миқдори ивазшуда: {count}.",noChange:"Тағйирот лозим набуд.",changedText:"Матн тағйир ёфт. Барои баргардондан Undo-ро пахш кун.",removedBlank:"Сатрҳои холии покшуда: {count}.",removedDuplicates:"Такрорҳои покшуда: {count}.",sortedLines:"Сатрҳо аз А то Я тартиб дода шуданд.",spacesCleaned:"Фосилаҳои зиёдатӣ тоза шуданд."});
 function t(key){return (dict[$("language").value]||dict.en)[key]||dict.en[key]||key}
 function translate(lang){
  const d=dict[lang]||dict.en;
@@ -128,6 +131,8 @@ function translate(lang){
  Object.entries(labels).forEach(([id,items])=>items.forEach(([v,k])=>{const o=$(id).querySelector(`option[value="${v}"]`);if(o)o.textContent=d[k]||dict.en[k]}));
  const templateKeys={ "":"templatePlaceholder",quote:"templateQuote",announcement:"templateAnnouncement",study:"templateStudy",creator:"templateCreator",minimal:"templateMinimal" };
  Object.entries(templateKeys).forEach(([value,key])=>{const option=$("templateSelect")?.querySelector(`option[value="${value}"]`);if(option)option.textContent=d[key]||dict.en[key]});
+ const placeholders={findText:d.findPlaceholder||dict.en.findPlaceholder,replaceText:d.replacePlaceholder||dict.en.replacePlaceholder};
+ Object.entries(placeholders).forEach(([id,value])=>{const el=$(id);if(el)el.placeholder=value});
  document.documentElement.lang=lang;
 }
 $("language").addEventListener("change",e=>translate(e.target.value));
@@ -192,6 +197,7 @@ function updatePreview(){
  $("previewText").style.fontFamily=$("font").value||"Arial";
  $("previewText").style.fontSize=(Math.max(6,Math.min(200,Number($("size").value)||32)))+"px";
  $("previewText").style.fontWeight=$("weight").value||"400";
+ updateTextStats();
 }
 function captureSelection(){
  const selection=window.getSelection();
@@ -200,6 +206,84 @@ function captureSelection(){
 }
 document.addEventListener("selectionchange",captureSelection);
 editor.addEventListener("input",()=>{remember();updatePreview()});
+
+function updateTextStats(){
+ const plain=editor.innerText||editor.textContent||"";
+ const characters=Array.from(plain.replace(/\n/g,"")).length;
+ const words=plain.trim()?plain.trim().split(/\s+/).filter(Boolean).length:0;
+ const lines=[...editor.children].length;
+ const target=$("textStats");
+ if(target)target.textContent=t("statsLabel").replace("{chars}",String(characters)).replace("{words}",String(words)).replace("{lines}",String(lines));
+}
+function setTextToolStatus(message){const target=$("textToolsStatus");if(target)target.textContent=message}
+function editorTextNodes(){
+ const walker=document.createTreeWalker(editor,NodeFilter.SHOW_TEXT);
+ const nodes=[];let node;
+ while((node=walker.nextNode()))nodes.push(node);
+ return nodes;
+}
+function applyTextTransform(transform,successMessage){
+ let changed=false;
+ editorTextNodes().forEach(node=>{const next=transform(node.nodeValue||"");if(next!==node.nodeValue){node.nodeValue=next;changed=true}});
+ if(changed){remember();updatePreview();setTextToolStatus(successMessage||t("changedText"))}
+ else setTextToolStatus(t("noChange"));
+}
+function escapeRegExp(value){
+ const special=[".","*","+","?","^","$","{","}","(",")","|","[","]","\\"];
+ return Array.from(value).map(character=>special.includes(character)?"\\"+character:character).join("");
+}
+function replaceText(all){
+ const find=$("findText").value;
+ if(!find){setTextToolStatus(t("searchMissing"));$("findText").focus();return}
+ const replacement=$("replaceText").value;
+ let count=0;
+ const flags=all?"giu":"iu";
+ const patternSource=escapeRegExp(find);
+ for(const node of editorTextNodes()){
+  if(!all&&count>0)break;
+  const pattern=new RegExp(patternSource,flags);
+  node.nodeValue=(node.nodeValue||"").replace(pattern,match=>{count++;return replacement});
+ }
+ if(count){remember();updatePreview();setTextToolStatus(all?t("replacedMany").replace("{count}",String(count)):t("replacedOne"))}
+ else setTextToolStatus(t("notFound"));
+}
+$("replaceNextBtn").addEventListener("click",()=>replaceText(false));
+$("replaceAllBtn").addEventListener("click",()=>replaceText(true));
+$("upperBtn").addEventListener("click",()=>applyTextTransform(value=>value.toUpperCase()));
+$("lowerBtn").addEventListener("click",()=>applyTextTransform(value=>value.toLowerCase()));
+$("titleCaseBtn").addEventListener("click",()=>applyTextTransform(value=>{
+ let start=true;
+ return Array.from(value).map(character=>{
+  if(/[\p{L}\p{N}]/u.test(character)){const result=start?character.toUpperCase():character.toLowerCase();start=false;return result}
+  start=true;return character;
+ }).join("");
+}));
+$("trimSpacesBtn").addEventListener("click",()=>applyTextTransform(value=>value.replace(/[ \t]{2,}/g," ").replace(/^[ \t]+|[ \t]+$/g," "),t("spacesCleaned")));
+$("removeBlankBtn").addEventListener("click",()=>{
+ const rows=[...editor.children],kept=rows.filter(row=>(row.textContent||"").trim());
+ const removed=rows.length-kept.length;
+ if(!removed){setTextToolStatus(t("noChange"));return}
+ if(!kept.length){const row=document.createElement("div");row.className="text-line";row.contentEditable="true";row.spellcheck=false;row.innerHTML="<br>";kept.push(row)}
+ editor.replaceChildren(...kept);normalizeLines();remember();updatePreview();setTextToolStatus(t("removedBlank").replace("{count}",String(removed)));
+});
+$("dedupeLinesBtn").addEventListener("click",()=>{
+ const seen=new Set(),kept=[];let removed=0;
+ [...editor.children].forEach(row=>{
+  const key=(row.innerText||row.textContent||"").trim().replace(/\s+/g," ").toLocaleLowerCase();
+  if(!key||seen.has(key)){removed++;return}
+  seen.add(key);kept.push(row);
+ });
+ if(!removed){setTextToolStatus(t("noChange"));return}
+ if(!kept.length){const row=document.createElement("div");row.className="text-line";row.contentEditable="true";row.spellcheck=false;row.innerHTML="<br>";kept.push(row)}
+ editor.replaceChildren(...kept);normalizeLines();remember();updatePreview();setTextToolStatus(t("removedDuplicates").replace("{count}",String(removed)));
+});
+$("sortLinesBtn").addEventListener("click",()=>{
+ const locale={en:"en",ru:"ru",tg:"tg"}[$("language").value]||"en";
+ const rows=[...editor.children];
+ rows.sort((a,b)=>{const av=(a.innerText||a.textContent||"").trim(),bv=(b.innerText||b.textContent||"").trim();if(!av)return 1;if(!bv)return -1;return av.localeCompare(bv,locale,{sensitivity:"base",numeric:true})});
+ editor.replaceChildren(...rows);normalizeLines();remember();updatePreview();setTextToolStatus(t("sortedLines"));
+});
+
 ["canvasPreset","canvasBg","defaultColor","align","shadow","font","size","weight"].forEach(id=>{
  const control=$(id);if(!control)return;
  control.addEventListener(control.tagName==="SELECT"?"change":"input",updatePreview);
@@ -307,7 +391,7 @@ $("resetBtn").addEventListener("click",()=>{
 $("saveBtn").addEventListener("click",()=>{
  const ids=["font","size","color","highlight","transparentHighlight","spacing","wordSpacing","weight","align","shadow","linePause","deletePause","loopMode","animateBy","entranceEffect","exitEffect","unitDuration","unitDelay","canvasPreset"],settings={};
  ids.forEach(id=>{const el=$(id);if(el)settings[id]=el.type==="checkbox"?el.checked:el.value});
- const project={format:"textivo-project",schemaVersion:2,app:"Textivo",author:"Khayom Abdurahmonov",savedAt:new Date().toISOString(),html:sanitizeEditorHTML(editor.innerHTML),lang:$("language").value,bg:$("canvasBg").value,transparentBg:hasTransparentBackground(),defaultColor:$("defaultColor").value,align:$("align").value,settings};
+ const project={format:"textivo-project",schemaVersion:2,app:"Textivo",author:"Khayom Abdurahmonov",authorGithub:"https://github.com/Khayom1",savedAt:new Date().toISOString(),html:sanitizeEditorHTML(editor.innerHTML),lang:$("language").value,bg:$("canvasBg").value,transparentBg:hasTransparentBackground(),defaultColor:$("defaultColor").value,align:$("align").value,settings};
  try{const data=JSON.stringify(project);if(data.length>2000000)throw new Error("Project exceeds the 2 MB local-storage limit.");localStorage.setItem("textivo-project-v13",data);localStorage.setItem("textivo-project-v9",data);$("saveBtn").textContent="Saved ✓";setTimeout(()=>$("saveBtn").textContent=t("saveBtn"),1600)}
  catch(error){alert("Could not save project: "+error.message)}
 });
@@ -320,7 +404,7 @@ $("copyBtn").addEventListener("click",async()=>{
  catch{alert("Clipboard access is not available. Select and copy the text manually.")}
 });
 $("htmlBtn").addEventListener("click",()=>download("textivo.html",
- `<!doctype html><html lang="${$("language").value}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Textivo Export</title><style>body{margin:0;padding:32px;background:${hasTransparentBackground()?"transparent":$("canvasBg").value};color:${$("defaultColor").value};font-family:Arial,sans-serif}.text-line{white-space:pre-wrap;overflow-wrap:anywhere;text-align:${$("align").value}}</style></head><body><main>${sanitizeEditorHTML(editor.innerHTML)}</main><footer>Created with Textivo · Khayom Abdurahmonov</footer></body></html>`,"text/html"));
+ `<!doctype html><html lang="${$("language").value}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Textivo Export</title><style>body{margin:0;padding:32px;background:${hasTransparentBackground()?"transparent":$("canvasBg").value};color:${$("defaultColor").value};font-family:Arial,sans-serif}.text-line{white-space:pre-wrap;overflow-wrap:anywhere;text-align:${$("align").value}}</style></head><body><main>${sanitizeEditorHTML(editor.innerHTML)}</main><footer>Created with Textivo · Khayom Abdurahmonov · <a href="https://github.com/Khayom1">GitHub: @Khayom1</a></footer></body></html>`,"text/html"));
 
 /* TEXTIVO_SVG_EXPORT_V12 — native vector + SMIL animation */
 function svgEscape(value) {
@@ -775,6 +859,7 @@ $("animationStatus").textContent=t("ready");
       schemaVersion: 2,
       app: "Textivo",
       author: "Khayom Abdurahmonov",
+      authorGithub: "https://github.com/Khayom1",
       exportedAt: new Date().toISOString(),
       language: $("language")?.value || "en",
       content: {
