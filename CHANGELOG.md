@@ -1,34 +1,26 @@
 # Changelog
 
-## v13 — Reliability and creative workflow
+## v15 — Text Studio workflow
 
 ### Added
-- Five built-in starting templates: quote, announcement, study card, creator title, and minimal statement.
-- Four canvas presets: 16:9, 1:1, 9:16, and 4:5.
-- PNG export dimensions that follow the selected canvas preset.
-- Repository integrity script for maintainers.
+- Live character, word, and line counters.
+- Find and replace: replace the first match or all matches in the text workspace.
+- Text case tools: uppercase, lowercase, and title case.
+- Text cleanup: normalize repeated spaces, remove empty lines, remove duplicate lines, and sort lines alphabetically.
+- Fully multilingual labels and feedback for the new text tools in English, Russian, and Tajik.
+- A complete user guide covering the text-only workflow, exports, project backups, privacy, and troubleshooting.
+- Explicit creator attribution and GitHub profile links in the application, project metadata, and exported files.
 
-### Fixed and improved
-- Reworked undo/redo history to store the previous editor state.
-- Reset now restores a properly editable text line and resets the history baseline.
-- Local project saving now includes the full set of motion settings and canvas preset.
-- Project JSON import validates the file, enforces a 2 MB size limit, restricts accepted settings, and sanitizes rich HTML.
-- Pasted content is inserted as plain text to prevent untrusted markup from entering the editor.
-- Preview and exports use sanitized editor markup.
-- SVG text shadow is now applied to the exported composition.
-- SVG delete-only mode starts its exit animation at the correct time.
-- PNG export preserves inline text styling, colors, font weights, highlights, spacing, and decorations more accurately.
-- Updated the PWA manifest, metadata, asset versions, and offline cache.
-- Added the author marker to the application source.
-
-### Repository cleanup
-- Removed two obsolete JavaScript backup files.
-- Removed a malformed duplicate logo asset name.
-- Rebuilt the README and refreshed the installation guide.
+### Improved
+- Clarified that each editor box is a separate text line.
+- Refocused product positioning on a text-only creative studio.
+- Updated the PWA cache and asset versions to v15.
 
 ### Validation
-- JavaScript source parsed successfully.
-- All 126 statically referenced DOM IDs were found in the HTML or documented as generated controls.
-- No duplicate HTML IDs were found.
-- Manifest JSON parsed successfully.
-- Browser interaction, device-specific rendering, and export compatibility still require manual testing on target browsers.
+- Repository integrity checks cover the new controls, text utilities, author attribution, and synchronized app/cache versions.
+- Automated checks validate JavaScript syntax, static DOM references, duplicate IDs, manifest metadata, cache assets, and export safeguards.
+- Browser rendering, touch selection, and export fidelity should still be checked manually on target devices.
+
+## v14 and earlier
+
+Previous project history is preserved in the Git commit history.
