@@ -33,11 +33,11 @@ assert.match(js, /GitHub: https:\/\/github\.com\/Khayom1/, "Application source m
 for (const id of ["textStats","findText","replaceText","replaceNextBtn","replaceAllBtn","upperBtn","lowerBtn","titleCaseBtn","trimSpacesBtn","removeBlankBtn","dedupeLinesBtn","sortLinesBtn"]) assert.ok(ids.has(id), `Text Studio tool is missing: ${id}`);
 assert.match(js, /function updateTextStats/, "Live text statistics must be available");
 assert.match(js, /function replaceText/, "Find and replace tools must be available");
-assert.match(js, /Object.assign\\(dict\\.ru/, "Russian UI translations must be available");
-assert.match(js, /Object.assign\\(dict\\.tg/, "Tajik UI translations must be available");
+assert.ok(js.includes("Object.assign(dict.ru"), "Russian UI translations must be available");
+assert.ok(js.includes("Object.assign(dict.tg"), "Tajik UI translations must be available");
+assert.ok(readme.includes("GUIDE.md"), "README must link the full user guide");
 assert.match(guide, /Complete User Guide/);
 assert.match(guide, /GitHub @Khayom1/);
-assert.match(readme, /GUIDE\\.md/);
 assert.ok(guide.length > 10000, "The complete user guide must contain meaningful documentation");
 assert.match(js, /function sanitizeEditorHTML/, "Project import must sanitize rich HTML");
 assert.match(js, /lastRememberedHTML/, "Undo history must track the previous editor state");
