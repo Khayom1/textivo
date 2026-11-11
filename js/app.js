@@ -257,13 +257,23 @@ $("replaceNextBtn").addEventListener("click",()=>replaceText(false));
 $("replaceAllBtn").addEventListener("click",()=>replaceText(true));
 $("upperBtn").addEventListener("click",()=>applyTextTransform(value=>value.toUpperCase()));
 $("lowerBtn").addEventListener("click",()=>applyTextTransform(value=>value.toLowerCase()));
-$("titleCaseBtn").addEventListener("click",()=>applyTextTransform(value=>{
- let start=true;
- return Array.from(value).map(character=>{
-  if(/[\p{L}\p{N}]/u.test(character)){const result=start?character.toUpperCase():character.toLowerCase();start=false;return result}
-  start=true;return character;
- }).join("");
-}));
+$("titleCaseBtn").addEventListener("click",()=>{
+ let changed=false;
+ [...editor.children].forEach(row=>{
+  let start=true;
+  const walker=document.createTreeWalker(row,NodeFilter.SHOW_TEXT);
+  let node;
+  while((node=walker.nextNode())){
+   const next=Array.from(node.nodeValue||"").map(character=>{
+    if(/[\p{L}\p{N}]/u.test(character)){const result=start?character.toUpperCase():character.toLowerCase();start=false;return result}
+    start=true;return character;
+   }).join("");
+   if(next!==node.nodeValue){node.nodeValue=next;changed=true}
+  }
+ });
+ if(changed){remember();updatePreview();setTextToolStatus(t("changedText"))}
+ else setTextToolStatus(t("noChange"));
+});
 $("trimSpacesBtn").addEventListener("click",()=>applyTextTransform(value=>value.replace(/[ \t]{2,}/g," ").replace(/^[ \t]+|[ \t]+$/g,""),t("spacesCleaned")));
 $("removeBlankBtn").addEventListener("click",()=>{
  const rows=[...editor.children],kept=rows.filter(row=>(row.textContent||"").trim());
