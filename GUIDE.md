@@ -99,7 +99,7 @@ The interface can be switched between English, Russian, and Tajik from the langu
 - Press Enter to create a new line.
 - Use the Add line button to add another empty line.
 - Each box represents one line in the composition.
-- You can edit, delete, or rearrange the text in each box.
+- You can edit or clear the text in each box. Use the sorting tool when you want automatic alphabetical ordering.
 
 Use separate lines for a headline, subtitle, supporting message, and signature. This makes it easier to style and animate each part.
 
