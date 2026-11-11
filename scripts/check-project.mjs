@@ -46,6 +46,7 @@ assert.match(js, /blurFilters\.push/, "SVG blur must use a real Gaussian blur fi
 assert.doesNotMatch(js, /const\s+const/, "JavaScript must not contain duplicated const declarations");
 assert.match(css, /prefers-reduced-motion/, "Reduced-motion preferences must be respected");
 
+const appVersion = js.match(/TEXTIVO_BUILD = ["']v(\d+)["']/)?.[1];
 const cacheVersion = sw.match(/textivo-v(\d+)/)?.[1];
 const scriptVersion = html.match(/js\/app\.js\?v=(\d+)/)?.[1];
 const styleVersion = html.match(/css\/style\.css\?v=(\d+)/)?.[1];
