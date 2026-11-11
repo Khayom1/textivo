@@ -63,6 +63,8 @@ Keep Termux open while testing. Stop the server with `Ctrl+C`.
 - [ ] Export SVG. Open it in a browser and check left, center, and right alignment plus the shadow.
 - [ ] Export Project JSON, reset the editor, import the JSON, and verify the content and settings return.
 - [ ] Export animated HTML and test Play / Stop in the exported file.
+- [ ] In Motion Studio, test word-by-word animation with leading spaces, repeated spaces, punctuation, and multiple styled spans. Confirm whitespace does not appear as a separate animated word.
+- [ ] Repeat the same whitespace cases in the exported Animated HTML file.
 - [ ] Test transparent canvas export.
 - [ ] Load the app once, then turn off internet and reload to check the service-worker offline cache.
 
