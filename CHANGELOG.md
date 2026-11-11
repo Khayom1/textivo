@@ -1,5 +1,18 @@
 # Changelog
 
+## v16 — animation and release integrity
+
+### Fixed
+- Corrected the automated repository check that still expected v14 asset URLs while the application and service worker were on v15.
+- Synchronized HTML asset query strings, the application build identifier, the service-worker cache name, and precache URLs to v16.
+- Fixed word-unit grouping in Motion Studio and standalone Animated HTML export so leading whitespace stays with the first word instead of becoming a separate animation unit.
+- Preserved text content and inline formatting while splitting words for animation.
+
+### Validation
+- Extended repository integrity checks to verify the current release cache and both animation splitters.
+- Static browser/device checks remain part of the manual testing checklist.
+
+
 ## v15 — Text Studio workflow
 
 ### Added
